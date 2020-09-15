@@ -1,0 +1,14 @@
+.indicadores_tabla{
+    display: flex;
+    justify-content: space-around;
+}
+.indicadores_tabla h3{
+    color: #5a2149;
+}
+
+.indicadores_tabla h3:first-child{
+    flex:80%;
+}
+.indicadores_tabla h3:last-child{
+    flex:20%;
+}

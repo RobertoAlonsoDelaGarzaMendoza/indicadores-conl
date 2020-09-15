@@ -1,0 +1,19 @@
+.Header{
+    display: flex;
+    align-items: center;
+    background-color: #333333;
+    color: #ffffff;
+    height: 2rem;
+    justify-content: flex-end;
+    padding-right: 10%;
+}
+
+.Header_icons{
+    color: #ffffff;
+    margin-right: 10px;
+    transition: color 200ms ease-in;
+}
+
+.Header_icons:hover{
+    color: #edba00;
+}

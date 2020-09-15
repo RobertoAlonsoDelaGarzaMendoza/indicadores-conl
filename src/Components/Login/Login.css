@@ -1,0 +1,53 @@
+.Login{
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top:3rem;
+    display: flex;
+    text-align: center;
+    flex-direction: column;
+}
+
+.Login_logo_section{
+    justify-content: center;
+    display: flex;
+}
+
+.Login_Headlines h2{
+    color:gray;
+}
+
+.Login_form{
+    margin:10px 5px;
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    
+}
+
+.Login_form input{
+    background-color: #5d5d5d;
+    color:white;
+    border-radius: 3px 0px 0px 3px;
+}
+.Login_form button{
+    border-radius: 0px 3px 3px 0px;
+    transition: 200ms ease-in;
+}
+.Login_form input::placeholder{
+    color:white;
+}
+
+.Login_links{
+    margin-top: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+.button_loading_icon{
+    margin-left: .5rem;
+    display: none !important;
+}
+
+.cargando .button_loading_icon{
+    display: block !important;
+}
+

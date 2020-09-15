@@ -1,0 +1,74 @@
+@import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+
+body {
+  font-family: "PT Sans", sans-serif;
+  color: #333333 !important;
+}
+
+.Button {
+  background-color: #333333;
+  color: #ffffff;
+  border: none;
+  border-radius: 3px;
+  text-transform: uppercase;
+  font-weight: bold;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  outline: none;
+  transition: 200ms ease-in-out;
+}
+.Button:active {
+  background-color: #fdb917 !important;
+}
+.Button:disabled {
+  background-color: gray !important;
+}
+
+input,
+textarea {
+  border: none;
+  padding: 10px;
+  border-radius: 3px;
+  outline: none;
+}
+
+a {
+  margin-top: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 200ms ease-in;
+}
+
+a.link_router {
+  margin-top: 0;
+}
+
+a:hover {
+  color: #fdb917;
+}
+
+.panel_card {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  padding: 10px;
+}
+
+.morado {
+  background-color: #5a2149 !important;
+}
+
+.font-morado {
+  color: #5a2149 !important;
+}
+
+.azul {
+  background-color: #00afaa !important;
+}
+
+.img-responsive {
+  max-width: 100%;
+  height: auto;
+}

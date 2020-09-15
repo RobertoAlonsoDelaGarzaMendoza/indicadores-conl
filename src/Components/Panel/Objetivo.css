@@ -1,0 +1,41 @@
+.Indicador{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin-top: 1rem;
+}
+
+.nombre{
+    flex: 80%;
+}
+
+.estatus{
+    flex:20%;
+}
+
+.estatus .Button{
+    border: solid 1px #5a2149;
+    border-radius: 20px;
+    background-color: white;
+    color: #5a2149;
+    transition: color 200ms ease-in;
+}
+
+.estatus .Button:hover,
+.Button.Proceso:hover{
+    background-color: #5a2149 !important;
+    color: white;
+}
+
+.Button.Completed,.Button.Completed:disabled{
+    border: solid 1px #5a2149;
+    background-color: #5a2149 !important;
+    color: white;
+    border-radius: 20px;
+    cursor: initial;
+}
+
+.Button.Proceso{
+    background: #5a214994;
+    color: white;
+}

@@ -1,0 +1,89 @@
+.RondaPanel {
+  margin-left: 2%;
+  margin-right: 2%;
+  margin-top: 3rem;
+}
+
+.RondaPanel .Login_logo_section {
+  justify-content: space-between;
+  align-items: center;
+}
+.MuiMobileStepper-root {
+  max-width: 500px;
+  margin: auto;
+}
+.MuiLinearProgress-colorPrimary {
+  background-color: #b179a094 !important;
+}
+
+.MuiLinearProgress-barColorPrimary {
+  background-color: #5a2149 !important;
+}
+
+.opciones_ronda {
+  flex-direction: row !important;
+  justify-content: center;
+}
+
+.Mui-checked {
+  color: #5a2149 !important;
+}
+
+.panel_razon{
+  height: 13rem;
+  max-height: 13rem;
+  width: 80%;
+  border: 2px solid #5a2149;
+  resize: none;
+  transition: 200ms ease-in-out;
+}
+
+.panel_razon.oculto{
+  min-height: 0;
+  height: 0px;
+  padding:0;
+  border:none;
+}
+.RondaPanel .panel_card{
+  display: flex;
+}
+
+.RondaPanel .indicador{
+  transition: ease-in;
+  transition: 200ms ease-in-out;
+  flex:.1;
+  opacity: 0;
+  width: 10%;
+}
+
+.RondaPanel .indicador.active{
+  opacity: 1;
+}
+
+.RondaPanel .active{
+  flex:1 !important;
+}
+
+.RondaPanel .total-indicadores{
+  flex: .1;
+  border-left: 1px solid lightgray;
+  display: flex;
+  transition: 200ms ease-in-out;
+}
+
+.total-indicadores .fab{
+margin-bottom: auto;
+margin-top: auto;
+margin-left: -1.7rem;
+transform: scale(0);
+transition: 200ms ease-in;
+color: white;
+}
+
+.total-indicadores .fab.hidden{
+  transform: scale(1);
+}
+
+.total-indicadores .informacion{
+  width: 100%;
+}

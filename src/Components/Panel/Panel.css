@@ -1,0 +1,47 @@
+.PanelUsuario {
+  margin-left: 10%;
+  margin-right: 10%;
+  margin-top: 3rem;
+}
+
+.PanelUsuario .Login_logo_section {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.PanelUsuario .PanelUsuario_links {
+  font-weight: 400;
+  text-transform: uppercase;
+  margin-right: 2rem;
+}
+
+.PanelUsuario .Login_logo_section img {
+  height: 4rem;
+}
+
+.panel_usuario_informacion {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+}
+.informacion {
+  text-align: center;
+}
+
+.usuario_informacion {
+  color: #333333;
+}
+
+.bottom_button {
+  display: flex;
+  justify-content: center !important;
+}
+
+.bottom_button Button {
+  margin: 5px;
+}
+
+.PanelUsuario p {
+  font-size: 14px;
+  color: #333333 !important;
+}
