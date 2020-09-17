@@ -3,27 +3,44 @@ import "./Login.css";
 import logo from "../../Assets/nuevo_leon_logo.svg";
 import axios from "axios";
 import API from "../../Restful/Api";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Snackbar, SnackbarContent } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
+  const [message_snackbar, setMessageSnackbar] = useState(false);
+  const [message, setMessage] = useState("");
+
   let history = useHistory();
+
+  const showSnackbar = (message) => {
+    setMessage(message);
+    setMessageSnackbar(true);
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    API.get("/1", {
+    API.get("/login", {
       email: email,
     })
       .then((response) => {
-        console.log(response);
+        console.log("correct >>>", response);
+        switch (response.status) {
+          case 200:
+            //history.push("/panel");
+            break;
+          case 404:
+            break;
+          default:
+            break;
+        }
         // TODO logica para login y falso
-        history.push("/panel");
       })
       .catch((error) => {
-        console.log(error);
+        console.log("error >>>", error.response.status);
+        showSnackbar(error.message);
       })
       .then(() => {
         setLoading(false);
@@ -69,6 +86,15 @@ function Login() {
           <a className="Login_aviso_privacidad">Ver aviso de privacidad</a>
         </div>
       </div>
+      {/* Snackbar section */}
+      <Snackbar
+        message={message}
+        open={message_snackbar}
+        autoHideDuration={5000}
+        onClose={() => {
+          setMessageSnackbar(false);
+        }}
+      />
     </div>
   );
 }

@@ -16,7 +16,10 @@ function App() {
             <Panel />
           </Route>
           <Route path="/ronda">
-            <Ronda />
+            <Ronda type={""} />
+          </Route>
+          <Route path="/meta">
+            <Ronda type={"meta"} />
           </Route>
           <Route path="/">
             <Login />
