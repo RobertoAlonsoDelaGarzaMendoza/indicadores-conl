@@ -1,9 +1,10 @@
 import React from "react";
-import "./Objetivo.css";
+import "./Fila.css";
 import { Link } from "react-router-dom";
 
-function Objetivo({ objectivo }) {
-  let { nombre, estatus } = objectivo;
+
+
+function Fila({ nombre,estatus,padre }) {
 
   return (
     <div className="Indicador">
@@ -17,7 +18,7 @@ function Objetivo({ objectivo }) {
             Completado
           </button>
         ) : (
-          <Link className="link_router" to="/ronda">
+          <Link className="link_router" to={padre.ruta}>
             <button className={estatus ? "Button Proceso" : "Button"}>
               {estatus ? "En proceso" : "Completar"}
             </button>
@@ -28,4 +29,4 @@ function Objetivo({ objectivo }) {
   );
 }
 
-export default Objetivo;
+export default Fila;

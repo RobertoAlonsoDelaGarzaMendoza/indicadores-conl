@@ -10,7 +10,9 @@ import {
   List,
   ListItemText,
   ListItem,
-  Fab, Divider, ListSubheader
+  Fab,
+  Divider,
+  ListSubheader,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
@@ -25,16 +27,42 @@ import API from "../../Restful/Api";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import PropuestaForm from "./PropuestaForm";
 
-function Ronda() {
-  const [respuesta, setRespuesta] = useState("1");
+function Ronda({ type }) {
+  const [respuesta, setRespuesta] = useState("");
   const [mostrar_cuadro_razon, setMostraRazon] = useState(false);
   const [razon, setRazon] = useState("");
   const [step, setStep] = useState(0);
   const [dialog_open, setDialogOpen] = useState(false);
   const [finalizar, setFinalizar] = useState(false);
   const [estado_panel_finalizar, setEstadoPanelFinalizar] = useState(false);
-  const [propuestas,setPropuestas] = useState([]);
-  const [dialog_propuesta,setDialogPropuesta] = useState(true);
+  const [indicadores, setIndicadores] = useState([
+    {
+      id: 1,
+      objectivo: "Objectivo 1",
+      linea_estrategica: "Linea estrategica 1",
+      nombre_indicador: "nombre indicador 1",
+      voto: "",
+      razon: "",
+    },
+    {
+      id: 2,
+      objectivo: "Objectivo 2",
+      linea_estrategica: "Linea estrategica 2",
+      nombre_indicador: "nombre indicador 2",
+      voto: "",
+      razon: "",
+    },
+    {
+      id: 3,
+      objectivo: "Objectivo 3",
+      linea_estrategica: "Linea estrategica 2",
+      nombre_indicador: "nombre indicador 3",
+      voto: "",
+      razon: "",
+    },
+  ]);
+  const [propuestas, setPropuestas] = useState([]);
+  const [dialog_propuesta, setDialogPropuesta] = useState(false);
 
   useEffect(() => {
     if (step === indicadores.length - 1) {
@@ -43,20 +71,44 @@ function Ronda() {
       setFinalizar(false);
       setEstadoPanelFinalizar(false);
     }
+    if(indicadores[step].voto === "1"){
+      setMostraRazon(true);
+    }else{
+      setMostraRazon(false);
+    }
   }, [step]);
 
-  let indicadores = [
+  /*   let indicadores = [
     {
       id: 1,
       objectivo: "Objectivo 1",
       linea_estrategica: "Linea estrategica 1",
       nombre_indicador: "nombre indicador 1",
+      voto: "0",
+      razon:""
     },
     {
-      id: 1,
+      id: 2,
       objectivo: "Objectivo 2",
       linea_estrategica: "Linea estrategica 2",
       nombre_indicador: "nombre indicador 2",
+      voto: "0",
+      razon:""
+    },
+  ]; */
+
+  let opciones = [
+    {
+      value: "0",
+      label: "SI",
+    },
+    {
+      value: "1",
+      label: "NO",
+    },
+    {
+      value: "2",
+      label: "Prefiere no responder",
     },
   ];
 
@@ -79,20 +131,31 @@ function Ronda() {
   };
 
   const handleInput = (e) => {
+    let indicador = indicadores[step];
     switch (e.target.type) {
       case "radio":
-        setRespuesta(e.target.value);
-        if (e.target.value === "2") {
+        //setRespuesta(e.target.value);
+        if (e.target.value === "1") {
           setMostraRazon(true);
         } else {
           setMostraRazon(false);
-          setRazon("");
+          indicador.razon = "";
         }
+        indicador.voto = e.target.value;
         break;
       case "textarea":
-        setRazon(e.target.value);
+        //setRazon(e.target.value);
+        indicador.razon = e.target.value;
         break;
     }
+    let new_indicadores = indicadores.map((old_indicador)=>{
+      if(old_indicador.id === indicador.id){
+        return indicador
+      }else{
+        return old_indicador
+      }
+    });
+    setIndicadores(new_indicadores);
   };
 
   const handleSalir = () => {
@@ -118,38 +181,51 @@ function Ronda() {
           <h3 className="font-morado">{indicadores[step].objectivo}</h3>
           <h3 className="font-morado">{indicadores[step].linea_estrategica}</h3>
           <h3 className="font-morado">{indicadores[step].nombre_indicador}</h3>
-          <Carusel />
-          <div className="informacion">
-            <div className="informacion_dialogo">
-              <p>Fuente</p>
-              <p>Texto explicativo</p>
-              <p>Unidad de medida</p>
+          <div className={`infografia ${type === "meta" ? "meta" : ""}`}>
+            <Carusel />
+            <div className="informacion">
+              <div className="informacion_dialogo">
+                <p>
+                  Definicion: Es el resultado del promedio de los subíndices de
+                  gobierno abierto esde la perspectiva gubernamental (GAg) y de
+                  gobierno abierto desde la perspectiva ciudadana (GAc).
+                </p>
+                <p>Fuente: Censos Económicos INEGI​</p>
+              </div>
             </div>
-            <RadioGroup
-              className="opciones_ronda"
-              aria-label="gender"
-              name="inclusion"
-              value={respuesta}
-              onChange={handleInput}
-            >
-              <FormControlLabel value="1" control={<Radio />} label="SI" />
-              <FormControlLabel
-                value="2"
-                control={<Radio />}
-                label="NO"
-              />
-              <FormControlLabel value="3" control={<Radio />} label="Prefiere no responder" />
-            </RadioGroup>
-            <textarea
-              autoFocus={true}
-              type="textarea"
-              value={razon}
-              onChange={handleInput}
-              className={
-                mostrar_cuadro_razon ? "panel_razon" : "panel_razon oculto"
-              }
-              placeholder="Escriba las razones por las cuales no debería incluirse este indicador: ​"
-            ></textarea>
+          </div>
+          <div className="form">
+            <div>
+              <p>
+                ¿Considera usted que este indicador contribuye a monitorear el
+                avance?
+              </p>
+              <RadioGroup
+                className="opciones_ronda"
+                aria-label="gender"
+                name="inclusion"
+                value={indicadores[step].voto}
+                onChange={handleInput}
+              >
+                {opciones.map((opcion) => (
+                  <FormControlLabel
+                    value={opcion.value}
+                    control={<Radio />}
+                    label={opcion.label}
+                  />
+                ))}
+              </RadioGroup>
+              <textarea
+                autoFocus={true}
+                type="textarea"
+                value={indicadores[step].razon}
+                onChange={handleInput}
+                className={
+                  mostrar_cuadro_razon ? "panel_razon" : "panel_razon oculto"
+                }
+                placeholder="Escriba las razones por las cuales no debería incluirse este indicador: ​"
+              ></textarea>
+            </div>
           </div>
           <div>
             <MobileStepper
@@ -195,23 +271,51 @@ function Ronda() {
           </Fab>
           <div className="informacion">
             <List className="lista-indicadores">
-              {indicadores.map((indicador) => (
-                <ListItem key={indicador.id}>
-                  <ListItemText primary={indicador.nombre_indicador} />
-                </ListItem>
-              ))}
-              <Divider/>
-              <ListSubheader>Propuestas</ListSubheader>
+              {indicadores.map((indicador, index) => {
+                let voto = indicador.voto;
+                let opcion =
+                  voto === ""
+                    ? { label: "Sin seleccionar" }
+                    : opciones.find((opcion) => opcion.value === voto);
+                return (
+                  <ListItem key={indicador.id}>
+                    <ListItemText
+                      primary={indicador.nombre_indicador}
+                      secondary={opcion.label}
+                    />
+                  </ListItem>
+                );
+              })}
+              {propuestas.length ? (
+                <>
+                  <Divider />
+                  <ListSubheader>Propuestas</ListSubheader>
+                </>
+              ) : null}
+
               {propuestas.map((propuesta) => (
                 <ListItem key={propuesta.id}>
-                  <ListItemText primary={propuesta.nombre} />
+                  <ListItemText
+                    primary={propuesta.nombre}
+                    secondary={propuesta.razon}
+                  />
                 </ListItem>
               ))}
             </List>
-            <div className="bottom_button">
-              <button className="Button" onClick={()=> setDialogPropuesta(true)}>
-                Proponer
-              </button>
+            <div
+              className={`bottom_button ${
+                estado_panel_finalizar ? "active" : ""
+              }`}
+            >
+              {type === "" ? (
+                <button
+                  className="Button"
+                  onClick={() => setDialogPropuesta(true)}
+                >
+                  Proponer
+                </button>
+              ) : null}
+
               <button className="Button azul" onClick={handleSalir}>
                 Finalizar
               </button>
@@ -231,7 +335,7 @@ function Ronda() {
       {/* Propuesta Dialog */}
       <PropuestaForm
         flag_open={dialog_propuesta}
-        handleClose={()=>setDialogPropuesta(false)}
+        handleClose={() => setDialogPropuesta(false)}
         propuestas={propuestas}
         setPropuestas={setPropuestas}
       />

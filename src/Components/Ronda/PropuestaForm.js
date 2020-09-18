@@ -1,6 +1,6 @@
 import {
   Dialog,
-    DialogActions,
+  DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
@@ -15,25 +15,28 @@ function PropuestaForm({ flag_open, handleClose, propuestas, setPropuestas }) {
   const [fuente, setFuente] = useState("");
   const [direccion, setDireccion] = useState("");
 
-  const clearForm = () =>{
-      setNombre('');
-      setRazon('');
-      setFuente('');
-      setDireccion('');
-  }
+  const clearForm = () => {
+    setNombre("");
+    setRazon("");
+    setFuente("");
+    setDireccion("");
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if(nombre && razon){
-        setPropuestas([...propuestas,{
-            id:propuestas.length+1,
-            nombre:nombre,
-            razon:razon,
-            fuente:fuente,
-            direccion
-        }]);
-        clearForm()
-        handleClose()
+    if (nombre && razon) {
+      setPropuestas([
+        ...propuestas,
+        {
+          id: propuestas.length + 1,
+          nombre: nombre,
+          razon: razon,
+          fuente: fuente,
+          direccion,
+        },
+      ]);
+      clearForm();
+      handleClose();
     }
   };
 
@@ -86,8 +89,12 @@ function PropuestaForm({ flag_open, handleClose, propuestas, setPropuestas }) {
         </form>
       </DialogContent>
       <DialogActions>
-          <button onClick={handleClose} className="Button">Cancelar</button>
-          <button onClick={handleSubmit} className="Button azul">Guardar</button>
+        <button onClick={handleClose} className="Button">
+          Cancelar
+        </button>
+        <button onClick={handleSubmit} className="Button azul">
+          Guardar
+        </button>
       </DialogActions>
     </Dialog>
   );

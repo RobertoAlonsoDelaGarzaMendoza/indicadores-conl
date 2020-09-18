@@ -6,7 +6,7 @@ import "./Panel.css";
 import { Paper } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import RondaPanel from "./RondaPanel";
+import Lista from "./Lista";
 import Introduccion from "../Dialogs/Introduccion";
 
 import axios from 'axios';
@@ -33,6 +33,7 @@ function Panel() {
   let ronda = {
     numero: 1,
     descripcion: "Ronda de selección de indicadores",
+    ruta:"/ronda"
   };
   let indicadores = [
     {
@@ -48,7 +49,7 @@ function Panel() {
     },
     {
       id: 3,
-      nombre: "Asegurar la rendición de cuenetas en el servicio público",
+      nombre: "Asegurar la rendición de cuentas en el servicio público",
       estatus: 1,
     },
   ];
@@ -65,7 +66,7 @@ function Panel() {
             <h2 className="usuario_informacion puesto"> {usuario.puesto}</h2>
           </div>
         </div>
-        <RondaPanel ronda ={ronda} indicadores={indicadores}/>
+        <Lista padre={ronda} filas={indicadores} />
         <div className="bottom_button">
           <button className="Button morado" onClick={handleClickOpen}>
             Documentación

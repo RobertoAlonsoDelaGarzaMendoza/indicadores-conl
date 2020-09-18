@@ -11,6 +11,7 @@
 .MuiMobileStepper-root {
   max-width: 500px;
   margin: auto;
+  flex:1
 }
 .MuiLinearProgress-colorPrimary {
   background-color: #b179a094 !important;
@@ -49,7 +50,6 @@
 }
 
 .RondaPanel .indicador{
-  transition: ease-in;
   transition: 200ms ease-in-out;
   flex:.1;
   opacity: 0;
@@ -57,6 +57,28 @@
 }
 
 .RondaPanel .indicador.active{
+  opacity: 1;
+}
+
+.RondaPanel .infografia.meta{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-start !important;
+}
+
+.RondaPanel .indicador .form{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.RondaPanel .informacion .bottom_button{
+  transition: 200ms ease-in-out;
+  opacity: 0;
+}
+
+.RondaPanel .informacion .bottom_button.active{
   opacity: 1;
 }
 
