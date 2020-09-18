@@ -9,10 +9,10 @@ import { useState } from "react";
 import Lista from "./Lista";
 import Introduccion from "../Dialogs/Introduccion";
 
-import axios from 'axios';
-import API from '../../Restful/Api'
+import API from "../../Restful/Api";
+import UserHeader from "./UserHeader";
 
-function Panel() {
+function Panel({children}) {
   /* TODO descomentar cuando se tenga la informacion */
   //const [usuario,setUsuario] = useState();
   const [dialog_presentacion, setDialog_presentacion] = useState(true);
@@ -25,15 +25,12 @@ function Panel() {
     setDialog_presentacion(false);
   };
 
-  let usuario = {
-    nombre: "M.C. Jorge Juvenal Campos",
-    puesto: "Secretario de Agricultura del Estado de Nuevo León",
-  };
+
 
   let ronda = {
     numero: 1,
     descripcion: "Ronda de selección de indicadores",
-    ruta:"/ronda"
+    ruta: "/ronda",
   };
   let indicadores = [
     {
@@ -59,13 +56,8 @@ function Panel() {
         <img alt="logo_nuevo_leon" className="Login_logo" src={logo} />
       </div>
       <Paper variant="outlined" className="panel_card">
-        <div className="panel_usuario_informacion">
-          <div className="informacion">
-            <h2 className="usuario_informacion">Bienvenido Usuario:</h2>
-            <h2 className="usuario_informacion nombre">{usuario.nombre}</h2>
-            <h2 className="usuario_informacion puesto"> {usuario.puesto}</h2>
-          </div>
-        </div>
+        {children}
+        {/*         <UserHeader usuario={usuario}/>
         <Lista padre={ronda} filas={indicadores} />
         <div className="bottom_button">
           <button className="Button morado" onClick={handleClickOpen}>
@@ -74,13 +66,13 @@ function Panel() {
           <Link className="link_router" to="/">
             <button className="Button azul">Salir</button>
           </Link>
-        </div>
+        </div> */}
       </Paper>
-      <Introduccion
+      {/*       <Introduccion
         flag_open={dialog_presentacion}
         handleClickOpen={handleClickOpen}
         handleClose={handleClose}
-      />
+      /> */}
     </div>
   );
 }

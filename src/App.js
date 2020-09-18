@@ -4,7 +4,9 @@ import Header from "./Components/Header/Header";
 import Login from "./Components/Login/Login";
 import Panel from "./Components/Panel/Panel";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Ronda from "./Components/Ronda/Ronda";
+import Indicador from "./Components/Ronda/Indicador";
+import Rondas from "./Components/Panel/Rondas";
+import Ronda from "./Components/Panel/Ronda";
 
 function App() {
   return (
@@ -12,14 +14,17 @@ function App() {
       <Header />
       <Router>
         <Switch>
-          <Route path="/panel">
-            <Panel />
-          </Route>
           <Route path="/ronda">
-            <Ronda type={""} />
+            <Ronda />
+          </Route>
+          <Route path="/rondas">
+            <Rondas />
+          </Route>
+          <Route path="/indicador">
+            <Indicador type={"indicador"} />
           </Route>
           <Route path="/meta">
-            <Ronda type={"meta"} />
+            <Indicador type={"meta"} />
           </Route>
           <Route path="/">
             <Login />

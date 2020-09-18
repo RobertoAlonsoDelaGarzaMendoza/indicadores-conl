@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import "./Ronda.css";
+import "./Indicador.css";
 import logo from "../../Assets/nuevo_leon_logo.svg";
 import {
   Paper,
@@ -27,7 +27,7 @@ import API from "../../Restful/Api";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import PropuestaForm from "./PropuestaForm";
 
-function Ronda({ type }) {
+function Indicador({ type }) {
   const [respuesta, setRespuesta] = useState("");
   const [mostrar_cuadro_razon, setMostraRazon] = useState(false);
   const [razon, setRazon] = useState("");
@@ -160,7 +160,7 @@ function Ronda({ type }) {
 
   const handleSalir = () => {
     /* TODO agregar funcionalidad de enviado de datos */
-    history.push("/panel");
+    history.push("/ronda");
   };
   return (
     <div className="RondaPanel">
@@ -343,4 +343,4 @@ function Ronda({ type }) {
   );
 }
 
-export default Ronda;
+export default Indicador;

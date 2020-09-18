@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../Assets/nuevo_leon_logo.svg";
-import axios from "axios";
 import API from "../../Restful/Api";
 import { CircularProgress, Snackbar, SnackbarContent } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
@@ -22,6 +21,7 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
+    // TODO logica para login y falso
     API.get("/login", {
       email: email,
     })
@@ -36,7 +36,6 @@ function Login() {
           default:
             break;
         }
-        // TODO logica para login y falso
       })
       .catch((error) => {
         console.log("error >>>", error.response.status);
