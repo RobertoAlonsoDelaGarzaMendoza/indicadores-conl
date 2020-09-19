@@ -5,11 +5,16 @@ import API from "../../Restful/Api";
 import { CircularProgress, Snackbar, SnackbarContent } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
+import {useDispatch, useSelector} from 'react-redux';
+import {setToken} from '../../Redux/Actions';
+
 function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
+  const token = useSelector(state =>state.token);
+  const dispatch = useDispatch();
 
   let history = useHistory();
 
@@ -26,10 +31,12 @@ function Login() {
       email: email,
     })
       .then((response) => {
+        
         console.log("correct >>>", response);
         switch (response.status) {
           case 200:
-            //history.push("/panel");
+            dispatch(setToken(email));
+            history.push("/Rondas");
             break;
           case 404:
             break;
