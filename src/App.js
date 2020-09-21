@@ -14,7 +14,7 @@ function App() {
       <Header />
       <Router>
         <Switch>
-          <Route path="/ronda">
+          <Route exact path="/ronda/:id">
             <Ronda />
           </Route>
           <Route path="/rondas">

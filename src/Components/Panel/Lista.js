@@ -2,7 +2,7 @@ import React from "react";
 import "./Lista.css";
 import Fila from "./Fila";
 
-function Lista({padre,filas,nombre,titulo,titulo_accion}) {
+function Lista({filas,nombre,titulo,titulo_accion}) {
   return (
     <div className="RondaPanel">
       <h2 className="usuario_informacion">{nombre}</h2>
@@ -11,7 +11,7 @@ function Lista({padre,filas,nombre,titulo,titulo_accion}) {
         <h3>{titulo_accion}</h3>
       </div>
       {filas.map((fila) => {
-        return <Fila padre={padre} key={fila.id} nombre={fila.nombre} estatus={fila.estatus}/>;
+        return <Fila key={fila.id} nombre={fila.nombre} estatus={fila.estatus} link={fila.link}/>;
       })}
     </div>
   );

@@ -1,5 +1,5 @@
 import axios from "axios";
 
 export default axios.create({
-  baseURL: "https://jsonplaceholder.typicode.com/todos",
+  baseURL: "https://api-rest-indicador-dev.herokuapp.com/api",
 });

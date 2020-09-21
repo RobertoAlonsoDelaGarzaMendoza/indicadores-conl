@@ -1,19 +1,18 @@
 import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../Assets/nuevo_leon_logo.svg";
-import API from "../../Restful/Api";
-import { CircularProgress, Snackbar, SnackbarContent } from "@material-ui/core";
+import Api from "../../Restful/Api";
+import { CircularProgress, Snackbar } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
-import {useDispatch, useSelector} from 'react-redux';
-import {setToken} from '../../Redux/Actions';
+import { useDispatch } from "react-redux";
+import { setToken, setUser } from "../../Redux/Actions";
 
 function Login() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
-  const token = useSelector(state =>state.token);
   const dispatch = useDispatch();
 
   let history = useHistory();
@@ -27,15 +26,16 @@ function Login() {
     e.preventDefault();
     setLoading(true);
     // TODO logica para login y falso
-    API.get("/login", {
+    Api.post("/login", {
       email: email,
     })
       .then((response) => {
-        
         console.log("correct >>>", response);
         switch (response.status) {
           case 200:
-            dispatch(setToken(email));
+            Api.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+            dispatch(setToken(response.data.token));
+            dispatch(setUser(response.data.usuario));
             history.push("/Rondas");
             break;
           case 404:
@@ -45,7 +45,6 @@ function Login() {
         }
       })
       .catch((error) => {
-        console.log("error >>>", error.response.status);
         showSnackbar(error.message);
       })
       .then(() => {

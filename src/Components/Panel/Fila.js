@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 
 
-function Fila({ nombre,estatus,padre }) {
+function Fila({ nombre,estatus,link }) {
 
   return (
     <div className="Indicador">
@@ -18,7 +18,7 @@ function Fila({ nombre,estatus,padre }) {
             Completado
           </button>
         ) : (
-          <Link className="link_router" to={padre.ruta}>
+          <Link className="link_router" to={link}>
             <button className={estatus ? "Button Proceso" : "Button"}>
               {estatus ? "En proceso" : "Completar"}
             </button>
