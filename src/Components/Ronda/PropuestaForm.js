@@ -9,30 +9,33 @@ import React, { useState } from "react";
 
 import "./PropuestaForm.css";
 
-function PropuestaForm({ flag_open, handleClose, propuestas, setPropuestas }) {
+function PropuestaForm({ tipo, flag_open, handleClose, propuestas, setPropuestas }) {
   const [nombre, setNombre] = useState("");
-  const [razon, setRazon] = useState("");
+  const [justificacion, setJustificacion] = useState("");
   const [fuente, setFuente] = useState("");
-  const [direccion, setDireccion] = useState("");
+  const [url, setUrl] = useState("");
 
   const clearForm = () => {
     setNombre("");
-    setRazon("");
+    setJustificacion("");
     setFuente("");
-    setDireccion("");
+    setUrl("");
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (nombre && razon) {
+    if (nombre && justificacion) {
       setPropuestas([
         ...propuestas,
         {
           id: propuestas.length + 1,
-          nombre: nombre,
-          razon: razon,
-          fuente: fuente,
-          direccion,
+          nombre,
+          justificacion,
+          fuente,
+          url,
+          aspiracionId:null,
+          objectivoId:null,
+          lineaEstrategicaId:null,
         },
       ]);
       clearForm();
@@ -65,10 +68,10 @@ function PropuestaForm({ flag_open, handleClose, propuestas, setPropuestas }) {
           <textarea
             id="razon"
             nombre="razon"
-            value={razon}
+            value={justificacion}
             required={true}
             placeholder="¿Por qué incluir este nuevo indicador? *"
-            onChange={(e) => setRazon(e.target.value)}
+            onChange={(e) => setJustificacion(e.target.value)}
           ></textarea>
           <input
             id="fuente"
@@ -81,10 +84,10 @@ function PropuestaForm({ flag_open, handleClose, propuestas, setPropuestas }) {
           <input
             id="direccion"
             name="direccion"
-            value={direccion}
+            value={url}
             required={false}
             placeholder="Url o dirección donde podriamos encontrar informacion"
-            onChange={(e) => setDireccion(e.target.value)}
+            onChange={(e) => setUrl(e.target.value)}
           />
         </form>
       </DialogContent>

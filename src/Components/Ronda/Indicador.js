@@ -13,6 +13,7 @@ import {
   Fab,
   Divider,
   ListSubheader,
+  CircularProgress,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
@@ -20,49 +21,79 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 
 import Instruccion from "../Dialogs/Instruccion";
 import Carusel from "./Carusel";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-import axios from "axios";
-import API from "../../Restful/Api";
 import { ArrowBackIos, ArrowForwardIos } from "@material-ui/icons";
 import PropuestaForm from "./PropuestaForm";
+import Api from "../../Restful/Api";
+import { useSelector } from "react-redux";
+import LoadingButton from "../Panel/LoadingButton";
 
 function Indicador({ type }) {
-  const [respuesta, setRespuesta] = useState("");
+  let { tipo, idIndicador } = useParams();
+  const ronda = useSelector((state) => state.ronda);
+  const [indicador, setIndicador] = useState("");
   const [mostrar_cuadro_razon, setMostraRazon] = useState(false);
-  const [razon, setRazon] = useState("");
   const [step, setStep] = useState(0);
   const [dialog_open, setDialogOpen] = useState(false);
   const [finalizar, setFinalizar] = useState(false);
   const [estado_panel_finalizar, setEstadoPanelFinalizar] = useState(false);
-  const [indicadores, setIndicadores] = useState([
-    {
-      id: 1,
-      objectivo: "Objectivo 1",
-      linea_estrategica: "Linea estrategica 1",
-      nombre_indicador: "nombre indicador 1",
-      voto: "",
-      razon: "",
-    },
-    {
-      id: 2,
-      objectivo: "Objectivo 2",
-      linea_estrategica: "Linea estrategica 2",
-      nombre_indicador: "nombre indicador 2",
-      voto: "",
-      razon: "",
-    },
-    {
-      id: 3,
-      objectivo: "Objectivo 3",
-      linea_estrategica: "Linea estrategica 2",
-      nombre_indicador: "nombre indicador 3",
-      voto: "",
-      razon: "",
-    },
-  ]);
+  const [indicadores, setIndicadores] = useState([]);
   const [propuestas, setPropuestas] = useState([]);
   const [dialog_propuesta, setDialogPropuesta] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  useEffect(() => {
+    //console.log("ronda>>>", ronda);
+    switch (tipo) {
+      case "aspiracion":
+        tipo = "aspiracion";
+        break;
+      case "objetivo":
+        tipo = "objetivo";
+        break;
+      case "linea":
+        tipo = "lineaestrategica";
+        break;
+      default:
+        tipo = "error";
+        break;
+    }
+    Api.get(`/${tipo}/votos/${idIndicador}/${ronda.id}`)
+      .then((response) => {
+        console.log(response);
+        switch (response.status) {
+          case 200:
+            let data = response.data;
+            setIndicador(data.descripcion);
+            setIndicadores(buildIndicadores(data.indicadors));
+            console.log(indicadores);
+            break;
+          default:
+            break;
+        }
+      })
+      .catch((error) => {
+        console.log("error >>>", error);
+      });
+  }, []);
+
+  const buildIndicadores = (indicadores) => {
+    return indicadores.map((indicador) => {
+      let voto = indicador.votos.length
+        ? indicador.votos[0]
+        : {
+            id: null,
+            tipo_voto: "",
+            razon_no: "",
+          };
+      return {
+        ...indicador,
+        voto: { ...voto, tipo_voto: `${voto.tipo_voto}` },
+      };
+    });
+  };
 
   useEffect(() => {
     if (step === indicadores.length - 1) {
@@ -71,12 +102,12 @@ function Indicador({ type }) {
       setFinalizar(false);
       setEstadoPanelFinalizar(false);
     }
-    if(indicadores[step].voto === "1"){
+    if (indicadores[step]?.voto.tipo_voto === "1") {
       setMostraRazon(true);
-    }else{
+    } else {
       setMostraRazon(false);
     }
-  }, [step]);
+  }, [step, indicadores]);
 
   /*   let indicadores = [
     {
@@ -139,58 +170,78 @@ function Indicador({ type }) {
           setMostraRazon(true);
         } else {
           setMostraRazon(false);
-          indicador.razon = "";
+          indicador.voto.razon_no = "";
         }
-        indicador.voto = e.target.value;
+        indicador.voto.tipo_voto = e.target.value;
         break;
       case "textarea":
         //setRazon(e.target.value);
-        indicador.razon = e.target.value;
+        indicador.voto.razon_no = e.target.value;
         break;
     }
-    let new_indicadores = indicadores.map((old_indicador)=>{
-      if(old_indicador.id === indicador.id){
-        return indicador
-      }else{
-        return old_indicador
+    let new_indicadores = indicadores.map((old_indicador) => {
+      if (old_indicador.id === indicador.id) {
+        return indicador;
+      } else {
+        return old_indicador;
       }
     });
     setIndicadores(new_indicadores);
   };
 
   const handleSalir = () => {
-    /* TODO agregar funcionalidad de enviado de datos */
-    history.push("/ronda");
+    setSending(true);
+    Promise.all([enviarVotos(), enviarPropuestas()])
+      .then((results) => {
+        setSending(false);
+        console.log(results);
+        history.push(`/ronda/${ronda.id}`);
+      })
+      .catch((error) => {
+        setSending(false);
+        console.log(error.message);
+      });
   };
+
+  const enviarVotos = () => {
+    return Api.put(`/voto/${ronda.id}`, indicadores);
+  };
+
+  //TODO cosumir de manera correcta endpoint de propuestas
+  const enviarPropuestas = () => {
+    return Api.put(`${tipo}/indicadorPropuesto/${idIndicador}/${ronda.id}`, []);
+  };
+
   return (
     <div className="RondaPanel">
       <div className="Login_logo_section">
         <img alt="logo_nuevo_leon" className="Login_logo" src={logo} />
       </div>
-      <Paper variant="outlined" className="panel_card">
+      <Paper variant="elevation" elevation="4" className="panel_card">
         <div
           className={`indicador informacion ${
             !estado_panel_finalizar ? "active" : ""
           }`}
         >
-          <button className="Button" onClick={handleSalir}>
+          <LoadingButton
+            className="Button azul"
+            loading={sending}
+            text="Salir"
+            loading_text="Enviando"
+            onClick={handleSalir}
+          />
+          {/*  <button className="Button" onClick={handleSalir}>
             <ArrowBackIcon />
             salir
-          </button>
-          <h2 className="font-morado">{indicadores[step].objectivo}</h2>
-          <h3 className="font-morado">{indicadores[step].objectivo}</h3>
-          <h3 className="font-morado">{indicadores[step].linea_estrategica}</h3>
-          <h3 className="font-morado">{indicadores[step].nombre_indicador}</h3>
+          </button> */}
+          <h2 className="font-morado">{indicador}</h2>
+          <h3 className="font-morado">{indicadores[step]?.nombre}</h3>
           <div className={`infografia ${type === "meta" ? "meta" : ""}`}>
-            <Carusel />
+            <Carusel imagenes={indicadores[step]?.images} />
             <div className="informacion">
               <div className="informacion_dialogo">
-                <p>
-                  Definicion: Es el resultado del promedio de los subíndices de
-                  gobierno abierto esde la perspectiva gubernamental (GAg) y de
-                  gobierno abierto desde la perspectiva ciudadana (GAc).
-                </p>
-                <p>Fuente: Censos Económicos INEGI​</p>
+                <p>{indicadores[step]?.definicion}</p>
+                <p>{indicadores[step]?.fuente}</p>
               </div>
             </div>
           </div>
@@ -204,7 +255,7 @@ function Indicador({ type }) {
                 className="opciones_ronda"
                 aria-label="gender"
                 name="inclusion"
-                value={indicadores[step].voto}
+                value={indicadores[step]?.voto.tipo_voto}
                 onChange={handleInput}
               >
                 {opciones.map((opcion) => (
@@ -218,7 +269,7 @@ function Indicador({ type }) {
               <textarea
                 autoFocus={true}
                 type="textarea"
-                value={indicadores[step].razon}
+                value={indicadores[step]?.voto.razon_no}
                 onChange={handleInput}
                 className={
                   mostrar_cuadro_razon ? "panel_razon" : "panel_razon oculto"
@@ -272,16 +323,18 @@ function Indicador({ type }) {
           <div className="informacion">
             <List className="lista-indicadores">
               {indicadores.map((indicador, index) => {
-                let voto = indicador.voto;
+                let voto = indicador.voto.tipo_voto;
+                //console.log("valor voto>>>", voto);
                 let opcion =
-                  voto === ""
+                  voto === null
                     ? { label: "Sin seleccionar" }
                     : opciones.find((opcion) => opcion.value === voto);
+                //console.log("valor opcion>>>", opcion);
                 return (
                   <ListItem key={indicador.id}>
                     <ListItemText
-                      primary={indicador.nombre_indicador}
-                      secondary={opcion.label}
+                      primary={indicador.nombre}
+                      secondary={opcion?.label}
                     />
                   </ListItem>
                 );
@@ -297,7 +350,7 @@ function Indicador({ type }) {
                 <ListItem key={propuesta.id}>
                   <ListItemText
                     primary={propuesta.nombre}
-                    secondary={propuesta.razon}
+                    secondary={propuesta.razon_no}
                   />
                 </ListItem>
               ))}
@@ -307,7 +360,7 @@ function Indicador({ type }) {
                 estado_panel_finalizar ? "active" : ""
               }`}
             >
-              {type === "" ? (
+              {type === "indicador" ? (
                 <button
                   className="Button"
                   onClick={() => setDialogPropuesta(true)}
@@ -315,25 +368,27 @@ function Indicador({ type }) {
                   Proponer
                 </button>
               ) : null}
-
-              <button className="Button azul" onClick={handleSalir}>
-                Finalizar
-              </button>
+              <LoadingButton
+                className="Button azul"
+                loading={sending}
+                text="Finalizar"
+                loading_text="Enviando"
+                onClick={handleSalir}
+              />
             </div>
           </div>
         </div>
       </Paper>
-      {/* TODO: descomentar */}
       {
         <Instruccion
-          /* //TODO enviar el numero de ronda */
-          ronda={"1"}
+          ronda={ronda.id}
           flag_open={dialog_open}
           handleClose={handleClose}
         />
       }
       {/* Propuesta Dialog */}
       <PropuestaForm
+        tipo={tipo}
         flag_open={dialog_propuesta}
         handleClose={() => setDialogPropuesta(false)}
         propuestas={propuestas}

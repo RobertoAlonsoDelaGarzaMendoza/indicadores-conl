@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
 import { setToken, setUser } from "../../Redux/Actions";
+import LoadingButton from "../Panel/LoadingButton";
 
 function Login() {
   const [loading, setLoading] = useState(false);
@@ -33,18 +34,19 @@ function Login() {
         console.log("correct >>>", response);
         switch (response.status) {
           case 200:
-            Api.defaults.headers.common["Authorization"] = `Bearer ${response.data.token}`;
+            Api.defaults.headers.common[
+              "Authorization"
+            ] = `Bearer ${response.data.token}`;
             dispatch(setToken(response.data.token));
             dispatch(setUser(response.data.usuario));
             history.push("/Rondas");
-            break;
-          case 404:
             break;
           default:
             break;
         }
       })
       .catch((error) => {
+        console.log("error>>>", error);
         showSnackbar(error.message);
       })
       .then(() => {
@@ -63,7 +65,7 @@ function Login() {
         </h1>
         <h2>Ingrese a la plataforma con su correo electrónico registrado</h2>
         <form
-          className={loading ? "Login_form cargando" : "Login_form"}
+          className={loading ? "Login_form" : "Login_form"}
           onSubmit={handleSubmit}
         >
           <div className="input_group">
@@ -74,14 +76,13 @@ function Login() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <button className="Button Login_button" disabled={loading}>
-            {loading ? "Cargando" : "Ingresar"}
-            <CircularProgress
-              className="button_loading_icon"
-              size=".9rem"
-              color="inherit"
-            />
-          </button>
+          <LoadingButton
+            className="Button Login_button"
+            loading={loading}
+            text="Ingresar"
+            loading_text="Cargando"
+            onClick={handleSubmit}
+          />
         </form>
         <div className="Login_links">
           {/*           <span>

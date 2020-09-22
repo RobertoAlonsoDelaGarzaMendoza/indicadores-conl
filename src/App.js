@@ -20,10 +20,10 @@ function App() {
           <Route path="/rondas">
             <Rondas />
           </Route>
-          <Route path="/indicador">
+          <Route exact path="/indicador/:tipo/:idIndicador">
             <Indicador type={"indicador"} />
           </Route>
-          <Route path="/meta">
+          <Route path="/meta/:tipo/:idIndicador">
             <Indicador type={"meta"} />
           </Route>
           <Route path="/">

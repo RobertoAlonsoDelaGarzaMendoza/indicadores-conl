@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { setUser } from "../../Redux/Actions";
+import { setRonda, setUser } from "../../Redux/Actions";
 import Api from "../../Restful/Api";
 import Lista from "./Lista";
 import Panel from "./Panel";
@@ -9,13 +9,17 @@ import UserHeader from "./UserHeader";
 
 function Ronda() {
   const token = useSelector((state) => state.token);
+  const ronda = useSelector((state) => state.ronda);
+  const dispatch = useDispatch();
   let { id } = useParams();
   const [aspiraciones, setAspiraciones] = useState([]);
   const [objetivos, setObjetivos] = useState([]);
   const [lineas, setLineas] = useState([]);
 
   useEffect(() => {
-    console.log("token>>>>", token);
+    if(ronda.id !== id){
+      dispatch(setRonda({id:id}));
+    }
     if (token) {
       //Api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
       Api.post("/panel", {
@@ -31,8 +35,8 @@ function Ronda() {
                   return {
                     id: aspiracion.id,
                     nombre: aspiracion.descripcion,
-                    estatus: aspiracion.estatus,
-                    link: `/indicador/${aspiracion.id}`,
+                    estatus: 0,//aspiracion.estatus,
+                    link: `/indicador/aspiracion/${aspiracion.id}`,
                   };
                 })
               );
@@ -43,8 +47,8 @@ function Ronda() {
                   return {
                     id: objetivo.id,
                     nombre: objetivo.descripcion,
-                    estatus: objetivo.estatus,
-                    link: `/indicador/${objetivo.id}`,
+                    estatus: 0,//objetivo.estatus,
+                    link: `/indicador/objetivo/${objetivo.id}`,
                   };
                 })
               );
@@ -55,8 +59,8 @@ function Ronda() {
                   return {
                     id: linea.id,
                     nombre: linea.descripcion,
-                    estatus: linea.estatus,
-                    link: `/indicador/${linea.id}`,
+                    estatus: 0,//linea.estatus,
+                    link: `/indicador/linea/${linea.id}`,
                   };
                 })
               );
@@ -66,7 +70,7 @@ function Ronda() {
           }
         })
         .catch((error) => {
-          console.log(error.message);
+          console.log(error);
         });
     }
   }, []);

@@ -13,8 +13,6 @@ import API from "../../Restful/Api";
 import UserHeader from "./UserHeader";
 
 function Panel({children}) {
-  /* TODO descomentar cuando se tenga la informacion */
-  //const [usuario,setUsuario] = useState();
   const [dialog_presentacion, setDialog_presentacion] = useState(true);
 
   const handleClickOpen = () => {

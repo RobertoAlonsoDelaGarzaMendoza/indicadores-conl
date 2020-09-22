@@ -1,6 +1,6 @@
 .RondaPanel {
-  margin-left: 2%;
-  margin-right: 2%;
+  margin-left: 10%;
+  margin-right: 10%;
   margin-top: 3rem;
 }
 
@@ -47,6 +47,10 @@
 }
 .RondaPanel .panel_card{
   display: flex;
+  min-height: 70vh;
+  max-height: 70vh;
+  overflow-y: hidden;
+  
 }
 
 .RondaPanel .indicador{
@@ -54,6 +58,7 @@
   flex:.1;
   opacity: 0;
   width: 10%;
+  margin-right: 10px;
 }
 
 .RondaPanel .indicador.active{

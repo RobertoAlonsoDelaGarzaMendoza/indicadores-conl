@@ -1,31 +1,21 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import "./Carusel.css";
 import { MobileStepper } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 
-//TODO: remover import en produccion
-import img_1 from "../../Assets/linea_tiempo.png";
-import img_2 from "../../Assets/barras.png";
-
-function Carusel() {
-  let imagenes = [
-    {
-      id: 1,
-      titulo: "Evolución en el tiempo",
-      src: img_1,
-    },
-    {
-      id: 2,
-      titulo: "Barras",
-      src: img_2,
-    },
-  ];
+function Carusel({ imagenes = [] }) {
   const [step, setStep] = useState(imagenes.length ? 0 : -1);
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1);
   };
+
+  useEffect(() => {
+    if (imagenes.length) {
+      setStep(0);
+    }
+  }, [imagenes]);
 
   const handleBack = () => {
     setStep((prevStep) => prevStep - 1);
@@ -43,10 +33,10 @@ function Carusel() {
       >
         {imagenes.map((imagen) => (
           <div key={imagen.id}>
-            <h2>{imagen.titulo}</h2>
+            <h2>{imagen.descripcion}</h2>
             <div>
               <img
-                src={imagen.src}
+                src={imagen.url}
                 className="img-responsive"
                 alt="grafico"
               ></img>
@@ -56,7 +46,7 @@ function Carusel() {
       </SwipeableViews>
       {imagenes.length >= 2 ? (
         <MobileStepper
-          variant="text"
+          variant="dots"
           steps={imagenes.length}
           position="static"
           activeStep={step}
