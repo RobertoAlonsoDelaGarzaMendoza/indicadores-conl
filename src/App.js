@@ -3,10 +3,16 @@ import "./App.css";
 import Header from "./Components/Header/Header";
 import Login from "./Components/Login/Login";
 import Panel from "./Components/Panel/Panel";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Indicador from "./Components/Ronda/Indicador";
 import Rondas from "./Components/Panel/Rondas";
 import Ronda from "./Components/Panel/Ronda";
+import PrivateRoute from "./Components/Helpers/PrivateRoute";
 
 function App() {
   return (
@@ -14,21 +20,21 @@ function App() {
       <Header />
       <Router>
         <Switch>
-          <Route exact path="/ronda/:id">
+          <Route exact path="/">
+            <Login />
+          </Route>
+          <PrivateRoute exact path="/ronda/:id">
             <Ronda />
-          </Route>
-          <Route path="/rondas">
+          </PrivateRoute>
+          <PrivateRoute path="/rondas">
             <Rondas />
-          </Route>
+          </PrivateRoute>
           <Route exact path="/indicador/:tipo/:idIndicador">
             <Indicador type={"indicador"} />
           </Route>
-          <Route path="/meta/:tipo/:idIndicador">
+          <PrivateRoute path="/meta/:tipo/:idIndicador">
             <Indicador type={"meta"} />
-          </Route>
-          <Route path="/">
-            <Login />
-          </Route>
+          </PrivateRoute>
         </Switch>
       </Router>
     </div>

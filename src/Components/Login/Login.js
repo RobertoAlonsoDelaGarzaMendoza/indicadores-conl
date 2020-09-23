@@ -6,7 +6,7 @@ import { CircularProgress, Snackbar } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { setToken, setUser } from "../../Redux/Actions";
+import { loginIn, setToken, setUser } from "../../Redux/Actions";
 import LoadingButton from "../Panel/LoadingButton";
 
 function Login() {
@@ -39,6 +39,7 @@ function Login() {
             ] = `Bearer ${response.data.token}`;
             dispatch(setToken(response.data.token));
             dispatch(setUser(response.data.usuario));
+            dispatch(loginIn());
             history.push("/Rondas");
             break;
           default:
