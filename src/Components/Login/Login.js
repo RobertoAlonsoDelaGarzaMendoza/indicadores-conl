@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../Assets/nuevo_leon_logo.svg";
 import Api from "../../Restful/Api";
-import { CircularProgress, Snackbar } from "@material-ui/core";
+import { Snackbar } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
@@ -31,6 +31,7 @@ function Login() {
       email: email,
     })
       .then((response) => {
+        setLoading(false);
         console.log("correct >>>", response);
         switch (response.status) {
           case 200:
@@ -47,12 +48,11 @@ function Login() {
         }
       })
       .catch((error) => {
+        setLoading(false);
         console.log("error>>>", error);
         showSnackbar(error.message);
       })
-      .then(() => {
-        setLoading(false);
-      });
+      .then(() => {});
   };
   return (
     <div className="Login">

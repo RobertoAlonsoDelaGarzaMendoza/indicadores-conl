@@ -13,11 +13,13 @@ import {
   Fab,
   Divider,
   ListSubheader,
-  CircularProgress,
+  Slider,
+  ListItemSecondaryAction,
+  IconButton,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import DeleteIcon from "@material-ui/icons/Delete";
 
 import Instruccion from "../Dialogs/Instruccion";
 import Carusel from "./Carusel";
@@ -28,8 +30,9 @@ import PropuestaForm from "./PropuestaForm";
 import Api from "../../Restful/Api";
 import { useSelector } from "react-redux";
 import LoadingButton from "../Panel/LoadingButton";
+import Skeleton from "../Helpers/Skeleton";
 
-function Indicador({ type }) {
+function Indicador({ tipo_ronda }) {
   let { tipo, idIndicador } = useParams();
   const ronda = useSelector((state) => state.ronda);
   const [indicador, setIndicador] = useState("");
@@ -41,7 +44,7 @@ function Indicador({ type }) {
   const [indicadores, setIndicadores] = useState([]);
   const [propuestas, setPropuestas] = useState([]);
   const [dialog_propuesta, setDialogPropuesta] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
@@ -60,39 +63,71 @@ function Indicador({ type }) {
         tipo = "error";
         break;
     }
-    Api.get(`/${tipo}/votos/${idIndicador}/${ronda.id}`)
+    setLoading(true);
+    Api.get(
+      `/${tipo}/${tipo_ronda === "meta" ? "metas" : "votos"}/${idIndicador}/${
+        ronda.id
+      }`
+    )
       .then((response) => {
         console.log(response);
         switch (response.status) {
           case 200:
             let data = response.data;
             setIndicador(data.descripcion);
-            setIndicadores(buildIndicadores(data.indicadors));
+            setIndicadores(buildIndicadores(data.indicadors, tipo_ronda));
             console.log(indicadores);
+            setLoading(false);
             break;
           default:
             break;
         }
       })
       .catch((error) => {
+        setLoading(false);
         console.log("error >>>", error);
       });
   }, []);
 
-  const buildIndicadores = (indicadores) => {
-    return indicadores.map((indicador) => {
-      let voto = indicador.votos.length
-        ? indicador.votos[0]
-        : {
-            id: null,
-            tipo_voto: "",
-            razon_no: "",
+  const buildIndicadores = (indicadores, tipo_ronda) => {
+    switch (tipo_ronda) {
+      case "indicador":
+        return indicadores.map((indicador) => {
+          let voto = indicador.votos.length
+            ? indicador.votos[0]
+            : {
+                id: null,
+                tipo_voto: "",
+                razon_no: "",
+              };
+          return {
+            ...indicador,
+            voto: {
+              ...voto,
+              tipo_voto: `${voto.tipo_voto}`,
+            },
           };
-      return {
-        ...indicador,
-        voto: { ...voto, tipo_voto: `${voto.tipo_voto}` },
-      };
-    });
+        });
+      case "meta":
+        return indicadores.map((indicador) => {
+          let voto = indicador.meta.length
+            ? indicador.meta[0]
+            : {
+                id: null,
+                tipo_voto: 0,
+                razon_no: "",
+                valor_meta: "",
+              };
+          return {
+            ...indicador,
+            voto: {
+              ...voto,
+              tipo_voto: `${voto.tipo_voto}`,
+              tipo_voto: voto.certeza,
+            },
+          };
+        });
+    }
   };
 
   useEffect(() => {
@@ -102,46 +137,43 @@ function Indicador({ type }) {
       setFinalizar(false);
       setEstadoPanelFinalizar(false);
     }
-    if (indicadores[step]?.voto.tipo_voto === "1") {
+    if (indicadores[step]?.voto.tipo_voto == "1") {
       setMostraRazon(true);
     } else {
       setMostraRazon(false);
     }
   }, [step, indicadores]);
 
-  /*   let indicadores = [
-    {
-      id: 1,
-      objectivo: "Objectivo 1",
-      linea_estrategica: "Linea estrategica 1",
-      nombre_indicador: "nombre indicador 1",
-      voto: "0",
-      razon:""
-    },
-    {
-      id: 2,
-      objectivo: "Objectivo 2",
-      linea_estrategica: "Linea estrategica 2",
-      nombre_indicador: "nombre indicador 2",
-      voto: "0",
-      razon:""
-    },
-  ]; */
-
-  let opciones = [
-    {
-      value: "0",
-      label: "SI",
-    },
-    {
-      value: "1",
-      label: "NO",
-    },
-    {
-      value: "2",
-      label: "Prefiere no responder",
-    },
-  ];
+  let opciones =
+    tipo_ronda == "meta"
+      ? [
+          {
+            value: 0,
+            label: "POCO",
+          },
+          {
+            value: 1,
+            label: "REGULAR",
+          },
+          {
+            value: 2,
+            label: "ALTA",
+          },
+        ]
+      : [
+          {
+            value: "0",
+            label: "SI",
+          },
+          {
+            value: "1",
+            label: "NO",
+          },
+          {
+            value: "2",
+            label: "Prefiere no responder",
+          },
+        ];
 
   let history = useHistory();
 
@@ -153,15 +185,21 @@ function Indicador({ type }) {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleClickOpen = () => {
-    setDialogOpen(true);
-  };
-
   const handleClose = () => {
     setDialogOpen(false);
   };
 
+  const handleSlide = (event, newValue) => {
+    handleInput({
+      target: {
+        type: "slider",
+        value: newValue,
+      },
+    });
+  };
+
   const handleInput = (e) => {
+    console.log(e);
     let indicador = indicadores[step];
     switch (e.target.type) {
       case "radio":
@@ -178,6 +216,14 @@ function Indicador({ type }) {
         //setRazon(e.target.value);
         indicador.voto.razon_no = e.target.value;
         break;
+
+      case "slider":
+        indicador.voto.tipo_voto = e.target.value;
+        break;
+
+      case "text":
+        indicador.voto.valor_meta = e.target.value;
+        break;
     }
     let new_indicadores = indicadores.map((old_indicador) => {
       if (old_indicador.id === indicador.id) {
@@ -191,7 +237,19 @@ function Indicador({ type }) {
 
   const handleSalir = () => {
     setSending(true);
-    Promise.all([enviarVotos(), enviarPropuestas()])
+    let sends = [];
+    switch (tipo_ronda) {
+      case "indicador":
+        sends.push(enviarVotos());
+        sends.push(enviarPropuestas());
+        break;
+      case "meta":
+        sends.push(enviarMetas());
+        break;
+      default:
+        break;
+    }
+    Promise.all(sends)
       .then((results) => {
         setSending(false);
         console.log(results);
@@ -207,9 +265,36 @@ function Indicador({ type }) {
     return Api.put(`/voto/${ronda.id}`, indicadores);
   };
 
-  //TODO cosumir de manera correcta endpoint de propuestas
+  const enviarMetas = () => {
+    return Api.post(
+      `/meta/${ronda.id}`,
+      indicadores.map((indicador) => {
+        return {
+          ...indicador,
+          meta: {
+            ...indicador.voto,
+            certeza: indicador.voto.tipo_voto,
+            comentario: indicador.voto.razon_no,
+          },
+        };
+      })
+    );
+  };
+
   const enviarPropuestas = () => {
-    return Api.put(`${tipo}/indicadorPropuesto/${idIndicador}/${ronda.id}`, []);
+    return Api.post(`/indicadorPropuesto/${ronda.id}`, {
+      indicadoresPropuestos: propuestas,
+    });
+  };
+
+  const handleDeletePropuesta = (index) => {
+    let p = propuestas;
+    p.splice(index, 1);
+    setPropuestas(
+      p.map((propuesta) => {
+        return propuesta;
+      })
+    );
   };
 
   return (
@@ -217,7 +302,7 @@ function Indicador({ type }) {
       <div className="Login_logo_section">
         <img alt="logo_nuevo_leon" className="Login_logo" src={logo} />
       </div>
-      <Paper variant="elevation" elevation="4" className="panel_card">
+      <Paper variant="elevation" elevation={4} className="panel_card">
         <div
           className={`indicador informacion ${
             !estado_panel_finalizar ? "active" : ""
@@ -234,77 +319,141 @@ function Indicador({ type }) {
             <ArrowBackIcon />
             salir
           </button> */}
-          <h2 className="font-morado">{indicador}</h2>
-          <h3 className="font-morado">{indicadores[step]?.nombre}</h3>
-          <div className={`infografia ${type === "meta" ? "meta" : ""}`}>
-            <Carusel imagenes={indicadores[step]?.images} />
+          <h2 className="font-morado">{loading ? <Skeleton /> : indicador}</h2>
+          <h3 className="font-morado">
+            {loading ? <Skeleton /> : indicadores[step]?.nombre}
+          </h3>
+          <div className={`infografia ${tipo_ronda === "meta" ? "meta" : ""}`}>
+            <Carusel loading={loading} imagenes={indicadores[step]?.images} />
             <div className="informacion">
               <div className="informacion_dialogo">
-                <p>{indicadores[step]?.definicion}</p>
-                <p>{indicadores[step]?.fuente}</p>
+                {loading ? (
+                  <>
+                    <Skeleton marginTop="1rem" />
+                    <Skeleton marginTop="1rem" />
+                  </>
+                ) : (
+                  <>
+                    <p>{indicadores[step]?.definicion}</p>
+                    <p>{indicadores[step]?.fuente}</p>
+                  </>
+                )}
               </div>
             </div>
           </div>
           <div className="form">
-            <div>
-              <p>
-                ¿Considera usted que este indicador contribuye a monitorear el
-                avance?
-              </p>
-              <RadioGroup
-                className="opciones_ronda"
-                aria-label="gender"
-                name="inclusion"
-                value={indicadores[step]?.voto.tipo_voto}
-                onChange={handleInput}
-              >
-                {opciones.map((opcion) => (
-                  <FormControlLabel
-                    value={opcion.value}
-                    control={<Radio />}
-                    label={opcion.label}
+            {tipo_ronda === "meta" && (
+              <div>
+                {loading ? (
+                  <Skeleton marginTop="1rem" />
+                ) : (
+                  <p>¿Qué tan probable es alcanzar la meta planteada?​</p>
+                )}
+                {loading ? (
+                  <Skeleton />
+                ) : (
+                  <input
+                    value={indicadores[step]?.voto.valor_meta}
+                    onChange={handleInput}
+                    placeholder={indicadores[step]?.unidad_medida}
                   />
-                ))}
-              </RadioGroup>
-              <textarea
-                autoFocus={true}
-                type="textarea"
-                value={indicadores[step]?.voto.razon_no}
-                onChange={handleInput}
-                className={
-                  mostrar_cuadro_razon ? "panel_razon" : "panel_razon oculto"
-                }
-                placeholder="Escriba las razones por las cuales no debería incluirse este indicador: ​"
-              ></textarea>
-            </div>
+                )}
+              </div>
+            )}
+            {tipo_ronda === "meta" ? (
+              <div>
+                {loading ? (
+                  <Skeleton marginTop="1rem" />
+                ) : (
+                  <p>¿Qué tan probable es alcanzar la meta planteada?​</p>
+                )}
+                {loading ? (
+                  <Skeleton />
+                ) : (
+                  <Slider
+                    value={indicadores[step]?.voto.tipo_voto}
+                    step={null}
+                    valueLabelDisplay="off"
+                    marks={opciones}
+                    max={opciones.length - 1}
+                    onChange={handleSlide}
+                  />
+                )}
+              </div>
+            ) : (
+              <div>
+                {loading ? (
+                  <Skeleton marginTop="1rem" />
+                ) : (
+                  <p>
+                    ¿Considera usted que este indicador contribuye a monitorear
+                    el avance?
+                  </p>
+                )}
+                {loading ? (
+                  <Skeleton marginTop="1rem" />
+                ) : (
+                  <RadioGroup
+                    className="opciones_ronda"
+                    aria-label="gender"
+                    name="inclusion"
+                    value={indicadores[step]?.voto.tipo_voto}
+                    onChange={handleInput}
+                  >
+                    {opciones.map((opcion, index) => (
+                      <FormControlLabel
+                        key={index}
+                        value={opcion.value}
+                        control={<Radio />}
+                        label={opcion.label}
+                      />
+                    ))}
+                  </RadioGroup>
+                )}
+                <textarea
+                  autoFocus={true}
+                  type="textarea"
+                  value={indicadores[step]?.voto.razon_no}
+                  onChange={handleInput}
+                  className={
+                    mostrar_cuadro_razon ? "panel_razon" : "panel_razon oculto"
+                  }
+                  placeholder="Escriba las razones por las cuales no debería incluirse este indicador: ​"
+                ></textarea>
+              </div>
+            )}
           </div>
           <div>
-            <MobileStepper
-              variant="progress"
-              steps={indicadores.length}
-              position="static"
-              activeStep={step}
-              nextButton={
-                <button
-                  onClick={handleNext}
-                  className="Button azul"
-                  disabled={step === indicadores.length - 1}
-                >
-                  siguiente
-                  <KeyboardArrowRight />
-                </button>
-              }
-              backButton={
-                <button
-                  onClick={handleBack}
-                  className="Button azul"
-                  disabled={step === 0}
-                >
-                  <KeyboardArrowLeft />
-                  anterior
-                </button>
-              }
-            ></MobileStepper>
+            {loading ? (
+              <Skeleton />
+            ) : (
+              <MobileStepper
+                variant="progress"
+                steps={indicadores.length}
+                position="static"
+                activeStep={step}
+                nextButton={
+                  <button
+                    onClick={handleNext}
+                    className="Button azul"
+                    disabled={step === indicadores.length - 1}
+                  >
+                    siguiente
+                    <KeyboardArrowRight />
+                  </button>
+                }
+                backButton={
+                  <button
+                    onClick={handleBack}
+                    className="Button azul"
+                    disabled={step === 0}
+                  >
+                    <KeyboardArrowLeft />
+                    anterior
+                  </button>
+                }
+              ></MobileStepper>
+            )}
           </div>
         </div>
         <div
@@ -321,46 +470,68 @@ function Indicador({ type }) {
             )}
           </Fab>
           <div className="informacion">
-            <List className="lista-indicadores">
-              {indicadores.map((indicador, index) => {
-                let voto = indicador.voto.tipo_voto;
-                //console.log("valor voto>>>", voto);
-                let opcion =
-                  voto === null
-                    ? { label: "Sin seleccionar" }
-                    : opciones.find((opcion) => opcion.value === voto);
-                //console.log("valor opcion>>>", opcion);
-                return (
-                  <ListItem key={indicador.id}>
-                    <ListItemText
-                      primary={indicador.nombre}
-                      secondary={opcion?.label}
-                    />
-                  </ListItem>
-                );
-              })}
-              {propuestas.length ? (
-                <>
-                  <Divider />
-                  <ListSubheader>Propuestas</ListSubheader>
-                </>
-              ) : null}
+            {loading ? (
+              Array(6)
+                .fill()
+                .map((elem, index) => (
+                  <div key={index}>
+                    <Skeleton marginTop="1.5rem" />
+                    <Skeleton marginTop="1rem" height=".5rem" />
+                  </div>
+                ))
+            ) : (
+              <List className="lista-indicadores">
+                {indicadores.map((indicador) => {
+                  let voto = indicador.voto.tipo_voto;
+                  //console.log("valor voto>>>", voto);
+                  let opcion =
+                    voto === null
+                      ? { label: "Sin seleccionar" }
+                      : opciones.find((opcion) => opcion.value == voto);
+                  //console.log("valor opcion>>>", opcion);
+                  return (
+                    <ListItem key={indicador.id}>
+                      <ListItemText
+                        primary={indicador.nombre}
+                        secondary={opcion?.label}
+                      />
+                    </ListItem>
+                  );
+                })}
+                {propuestas.length ? (
+                  <>
+                    <Divider />
+                    <ListSubheader>Propuestas</ListSubheader>
+                  </>
+                ) : null}
 
-              {propuestas.map((propuesta) => (
-                <ListItem key={propuesta.id}>
-                  <ListItemText
-                    primary={propuesta.nombre}
-                    secondary={propuesta.razon_no}
-                  />
-                </ListItem>
-              ))}
-            </List>
+                {propuestas.map((propuesta, index) => (
+                  <ListItem key={index}>
+                    <ListItemText
+                      primary={propuesta.nombre}
+                      secondary={propuesta.razon_no}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="eliminar"
+                        onClick={() => {
+                          handleDeletePropuesta(index);
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            )}
             <div
               className={`bottom_button ${
                 estado_panel_finalizar ? "active" : ""
               }`}
             >
-              {type === "indicador" ? (
+              {tipo_ronda === "indicador" ? (
                 <button
                   className="Button"
                   onClick={() => setDialogPropuesta(true)}
@@ -388,6 +559,7 @@ function Indicador({ type }) {
       }
       {/* Propuesta Dialog */}
       <PropuestaForm
+        idIndicador={idIndicador}
         tipo={tipo}
         flag_open={dialog_propuesta}
         handleClose={() => setDialogPropuesta(false)}

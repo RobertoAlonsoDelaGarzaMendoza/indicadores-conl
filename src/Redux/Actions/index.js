@@ -32,11 +32,23 @@ export const setRonda = (ronda) => {
 };
 
 export const deleteRonda = () => {
-  return{
-    type:"DELETE_RONDA"
-  }
-}
+  return {
+    type: "DELETE_RONDA",
+  };
+};
 
+export const setRondas = (rondas) => {
+  return {
+    type: "SET_RONDAS",
+    payload: rondas,
+  };
+};
+
+export const deleteRondas = () => {
+  return {
+    type: "DELETE_RONDAS",
+  };
+};
 
 export const loginIn = () => {
   return {

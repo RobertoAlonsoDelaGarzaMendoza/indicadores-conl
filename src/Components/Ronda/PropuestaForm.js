@@ -9,7 +9,14 @@ import React, { useState } from "react";
 
 import "./PropuestaForm.css";
 
-function PropuestaForm({ tipo, flag_open, handleClose, propuestas, setPropuestas }) {
+function PropuestaForm({
+  idIndicador,
+  tipo,
+  flag_open,
+  handleClose,
+  propuestas,
+  setPropuestas,
+}) {
   const [nombre, setNombre] = useState("");
   const [justificacion, setJustificacion] = useState("");
   const [fuente, setFuente] = useState("");
@@ -25,17 +32,18 @@ function PropuestaForm({ tipo, flag_open, handleClose, propuestas, setPropuestas
   const handleSubmit = (e) => {
     e.preventDefault();
     if (nombre && justificacion) {
+      console.log("tipo >>>", tipo);
       setPropuestas([
         ...propuestas,
         {
-          id: propuestas.length + 1,
+          id: null,
           nombre,
           justificacion,
           fuente,
           url,
-          aspiracionId:null,
-          objectivoId:null,
-          lineaEstrategicaId:null,
+          aspiracionId: tipo === "aspiracion" ? idIndicador : null,
+          objectivoId: tipo === "objetivo" ? idIndicador : null,
+          lineaEstrategicaId: tipo === "linea" ? idIndicador : null,
         },
       ]);
       clearForm();

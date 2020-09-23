@@ -2,6 +2,7 @@
   margin-left: 10%;
   margin-right: 10%;
   margin-top: 3rem;
+  margin-bottom: 3rem;
 }
 
 .RondaPanel .Login_logo_section {
@@ -11,7 +12,7 @@
 .MuiMobileStepper-root {
   max-width: 500px;
   margin: auto;
-  flex:1
+  flex: 1;
 }
 .MuiLinearProgress-colorPrimary {
   background-color: #b179a094 !important;
@@ -30,7 +31,7 @@
   color: #5a2149 !important;
 }
 
-.panel_razon{
+.panel_razon {
   height: 13rem;
   max-height: 13rem;
   width: 80%;
@@ -39,78 +40,81 @@
   transition: 200ms ease-in-out;
 }
 
-.panel_razon.oculto{
+.panel_razon.oculto {
   min-height: 0;
   height: 0px;
-  padding:0;
-  border:none;
+  padding: 0;
+  border: none;
 }
-.RondaPanel .panel_card{
+.RondaPanel .panel_card {
   display: flex;
   min-height: 70vh;
   max-height: 70vh;
   overflow-y: hidden;
-  
 }
 
-.RondaPanel .indicador{
+.RondaPanel .indicador {
   transition: 200ms ease-in-out;
-  flex:.1;
+  flex: 0.1;
   opacity: 0;
   width: 10%;
   margin-right: 10px;
 }
 
-.RondaPanel .indicador.active{
+.RondaPanel .indicador.active {
   opacity: 1;
 }
 
-.RondaPanel .infografia.meta{
+.RondaPanel .infografia.meta {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: flex-start !important;
+  justify-content: space-evenly;
 }
 
-.RondaPanel .indicador .form{
+.RondaPanel .infografia .informacion {
+  flex: 1;
+}
+
+.RondaPanel .indicador .form {
   display: flex;
-  justify-content: center;
+  justify-content: space-evenly;
   flex-wrap: wrap;
 }
 
-.RondaPanel .informacion .bottom_button{
+.RondaPanel .informacion .bottom_button {
   transition: 200ms ease-in-out;
   opacity: 0;
 }
 
-.RondaPanel .informacion .bottom_button.active{
+.RondaPanel .informacion .bottom_button.active {
   opacity: 1;
 }
 
-.RondaPanel .active{
-  flex:1 !important;
+.RondaPanel .active {
+  flex: 1 !important;
 }
 
-.RondaPanel .total-indicadores{
-  flex: .1;
+.RondaPanel .total-indicadores {
+  flex: 0.1;
   border-left: 1px solid lightgray;
   display: flex;
   transition: 200ms ease-in-out;
 }
 
-.total-indicadores .fab{
-margin-bottom: auto;
-margin-top: auto;
-margin-left: -1.7rem;
-transform: scale(0);
-transition: 200ms ease-in;
-color: white;
+.total-indicadores .fab {
+  margin-bottom: auto;
+  margin-top: auto;
+  margin-left: -1.7rem;
+  transform: scale(0);
+  transition: 200ms ease-in;
+  color: white;
 }
 
-.total-indicadores .fab.hidden{
+.total-indicadores .fab.hidden {
   transform: scale(1);
 }
 
-.total-indicadores .informacion{
+.total-indicadores .informacion {
   width: 100%;
 }

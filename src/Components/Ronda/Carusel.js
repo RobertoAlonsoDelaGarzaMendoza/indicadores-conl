@@ -4,8 +4,9 @@ import { MobileStepper } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
+import Skeleton from "../Helpers/Skeleton";
 
-function Carusel({ imagenes = [] }) {
+function Carusel({ loading, imagenes = [] }) {
   const [step, setStep] = useState(imagenes.length ? 0 : -1);
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1);
@@ -25,6 +26,12 @@ function Carusel({ imagenes = [] }) {
   };
   return (
     <div className="Carusel">
+      {loading ? (
+        <div>
+          <Skeleton marginTop="3rem" />
+          <Skeleton marginTop="1rem" height="200px" />
+        </div>
+      ) : null}
       <SwipeableViews
         index={step}
         enableMouseEvents

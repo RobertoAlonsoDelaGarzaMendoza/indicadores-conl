@@ -1,3 +1,6 @@
+.Carusel{
+    flex: 1;
+}
 .img-carusel{
     max-width: 100% !important;
 }
