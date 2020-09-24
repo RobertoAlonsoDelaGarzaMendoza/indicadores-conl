@@ -3,13 +3,16 @@
 * {
   font-family: "PT Sans", sans-serif !important;
 }
+/* #5a2149 morado */
+/*#00b1b0 verde */
+/* #fdb913 amarillo */
 
-body{
+body {
   color: #333333 !important;
 }
 
 .Button {
-  background-color: #333333;
+  background-color: #5a2149;
   color: #ffffff;
   border: none;
   border-radius: 3px;
@@ -23,7 +26,7 @@ body{
   transition: 200ms ease-in-out;
 }
 .Button:active {
-  background-color: #fdb917 !important;
+  background-color: #00b1b0 !important;
 }
 .Button:disabled {
   background-color: gray !important;
@@ -50,7 +53,7 @@ a.link_router {
 }
 
 a:hover {
-  color: #fdb917;
+  color: #00b1b0;
 }
 
 .panel_card {

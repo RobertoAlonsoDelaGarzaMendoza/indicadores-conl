@@ -15,11 +15,25 @@
   flex: 1;
 }
 .MuiLinearProgress-colorPrimary {
-  background-color: #b179a094 !important;
+  background-color: lightgray !important;
 }
 
 .MuiLinearProgress-barColorPrimary {
-  background-color: #5a2149 !important;
+  background-color: #00b1b0 !important;
+}
+
+.MuiSlider-thumbColorPrimary {
+  background-color: #00b1b0 !important;
+}
+.MuiSlider-rail {
+  background-color: #00b1b0  !important;
+}
+.MuiSlider-track {
+  background-color: #00b1b0 !important;
+}
+
+.MuiMobileStepper-dotActive {
+  background-color: #00b1b0 !important;
 }
 
 .opciones_ronda {
