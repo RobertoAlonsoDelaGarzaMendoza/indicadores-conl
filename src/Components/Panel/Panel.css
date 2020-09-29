@@ -35,6 +35,7 @@
 .bottom_button {
   display: flex;
   justify-content: center !important;
+  margin-top: 1rem;
 }
 
 .bottom_button Button {

@@ -11,16 +11,31 @@ function Lista({ loading, filas, nombre, titulo, titulo_accion }) {
         <h3>{loading ? <Skeleton /> : titulo}</h3>
         <h3>{loading ? <Skeleton /> : titulo_accion}</h3>
       </div>
-      {loading ? <Skeleton/> :filas.map((fila) => {
-        return (
-          <Fila
-            key={fila.id}
-            nombre={fila.nombre}
-            estatus={fila.estatus}
-            link={fila.link}
-          />
-        );
-      })}
+      {loading ? (
+        <Skeleton />
+      ) : (
+        filas.map((fila) => {
+          let subfilas =fila.subfilas !==undefined ? fila.subfilas.map((subfila) => (
+            <Fila
+              subfila={true}
+              key={subfila.id}
+              nombre={subfila.nombre}
+              estatus={subfila.estatus}
+              link={subfila.link}
+            />)):null
+          return (
+            <>
+              <Fila
+                key={fila.id}
+                nombre={fila.nombre}
+                estatus={fila.estatus}
+                link={fila.link}
+              />
+              {subfilas}
+            </>
+          );
+        })
+      )}
     </div>
   );
 }

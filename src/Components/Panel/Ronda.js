@@ -14,7 +14,7 @@ function Ronda() {
   let { id } = useParams();
   const [aspiraciones, setAspiraciones] = useState([]);
   const [objetivos, setObjetivos] = useState([]);
-  const [lineas, setLineas] = useState([]);
+  // const [lineas, setLineas] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const getTipoRonda = (tipo_ronda) => {
@@ -47,7 +47,7 @@ function Ronda() {
                 return {
                   id: aspiracion.id,
                   nombre: aspiracion.descripcion,
-                  estatus: aspiracion.estatus,
+                  estatus: 0, //aspiracion.estatus,
                   link: `/${getTipoRonda(t_ronda.tipo_ronda)}/aspiracion/${
                     aspiracion.id
                   }`,
@@ -61,26 +61,36 @@ function Ronda() {
                 return {
                   id: objetivo.id,
                   nombre: objetivo.descripcion,
-                  estatus: objetivo.estatus,
+                  estatus: 0, //objetivo.estatus,
                   link: `/${getTipoRonda(t_ronda.tipo_ronda)}/objetivo/${
                     objetivo.id
                   }`,
+                  subfilas: objetivo.lineasEstrategicas?.map((linea) => {
+                    return {
+                      id: linea.id,
+                      nombre: linea.descripcion,
+                      estatus: 0, //objetivo.estatus,
+                      link: `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
+                        linea.id
+                      }`,
+                    };
+                  }),
                 };
               })
             );
 
-            setLineas(
-              aspiraciones.map((linea) => {
-                return {
-                  id: linea.id,
-                  nombre: linea.descripcion,
-                  estatus: linea.estatus,
-                  link: `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
-                    linea.id
-                  }`,
-                };
-              })
-            );
+            // setLineas(
+            //   aspiraciones.map((linea) => {
+            //     return {
+            //       id: linea.id,
+            //       nombre: linea.descripcion,
+            //       estatus: 0,//linea.estatus,
+            //       link: `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
+            //         linea.id
+            //       }`,
+            //     };
+            //   })
+            // );
             break;
           default:
             break;
@@ -110,12 +120,12 @@ function Ronda() {
         titulo_accion="Estado"
         filas={objetivos}
       />
-      <Lista
+      {/* <Lista
         loading={loading}
         titulo="Líneas estratégicas"
         titulo_accion="Estado"
         filas={lineas}
-      />
+      /> */}
       <div className="bottom_button">
         <button className="Button morado">Documentación</button>
         <Link className="link_router" to="/rondas">

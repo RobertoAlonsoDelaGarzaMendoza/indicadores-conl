@@ -11,4 +11,5 @@
 }
 .indicadores_tabla h3:last-child{
     flex:20%;
+    text-align: center;
 }

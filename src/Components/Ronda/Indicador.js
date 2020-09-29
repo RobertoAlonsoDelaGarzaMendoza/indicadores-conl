@@ -16,6 +16,8 @@ import {
   Slider,
   ListItemSecondaryAction,
   IconButton,
+  Hidden,
+  Grid,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
@@ -236,29 +238,33 @@ function Indicador({ tipo_ronda }) {
   };
 
   const handleSalir = () => {
-    setSending(true);
-    let sends = [];
-    switch (tipo_ronda) {
-      case "indicador":
-        sends.push(enviarVotos());
-        sends.push(enviarPropuestas());
-        break;
-      case "meta":
-        sends.push(enviarMetas());
-        break;
-      default:
-        break;
+    if (indicadores.length == 0) {
+      history.push(`/ronda/${ronda.id}`);
+    } else {
+      setSending(true);
+      let sends = [];
+      switch (tipo_ronda) {
+        case "indicador":
+          sends.push(enviarVotos());
+          sends.push(enviarPropuestas());
+          break;
+        case "meta":
+          sends.push(enviarMetas());
+          break;
+        default:
+          break;
+      }
+      Promise.all(sends)
+        .then((results) => {
+          setSending(false);
+          console.log(results);
+          history.push(`/ronda/${ronda.id}`);
+        })
+        .catch((error) => {
+          setSending(false);
+          console.log(error.message);
+        });
     }
-    Promise.all(sends)
-      .then((results) => {
-        setSending(false);
-        console.log(results);
-        history.push(`/ronda/${ronda.id}`);
-      })
-      .catch((error) => {
-        setSending(false);
-        console.log(error.message);
-      });
   };
 
   const enviarVotos = () => {
@@ -304,7 +310,7 @@ function Indicador({ tipo_ronda }) {
       </div>
       <Paper variant="elevation" elevation={4} className="panel_card">
         <div
-          className={`indicador informacion ${
+          className={`indicador informacion y-scroll ${
             !estado_panel_finalizar ? "active" : ""
           }`}
         >
@@ -323,24 +329,28 @@ function Indicador({ tipo_ronda }) {
           <h3 className="font-morado">
             {loading ? <Skeleton /> : indicadores[step]?.nombre}
           </h3>
-          <div className={`infografia ${tipo_ronda === "meta" ? "meta" : ""}`}>
-            <Carusel loading={loading} imagenes={indicadores[step]?.images} />
-            <div className="informacion">
-              <div className="informacion_dialogo">
-                {loading ? (
-                  <>
-                    <Skeleton marginTop="1rem" />
-                    <Skeleton marginTop="1rem" />
-                  </>
-                ) : (
-                  <>
-                    <p>{indicadores[step]?.definicion}</p>
-                    <p>{indicadores[step]?.fuente}</p>
-                  </>
-                )}
+          <Grid container alignItems="center">
+            <Grid item sm={12} md={6}>
+              <Carusel loading={loading} imagenes={indicadores[step]?.images} />
+            </Grid>
+            <Grid item sm={12} md={6}>
+              <div className="informacion">
+                <div className="informacion_dialogo">
+                  {loading ? (
+                    <>
+                      <Skeleton marginTop="1rem" />
+                      <Skeleton marginTop="1rem" />
+                    </>
+                  ) : (
+                    <>
+                      <p>{indicadores[step]?.definicion}</p>
+                      <p>{indicadores[step]?.fuente}</p>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
+            </Grid>
+          </Grid>
           <div className="form">
             {tipo_ronda === "meta" && (
               <div>
@@ -423,7 +433,7 @@ function Indicador({ tipo_ronda }) {
               </div>
             )}
           </div>
-          <div>
+          <div className="sticky-bottom">
             {loading ? (
               <Skeleton />
             ) : (
@@ -435,7 +445,7 @@ function Indicador({ tipo_ronda }) {
                 nextButton={
                   <button
                     onClick={handleNext}
-                    className="Button azul"
+                    className="Button azul button-stepper"
                     disabled={step === indicadores.length - 1}
                   >
                     siguiente
@@ -445,7 +455,7 @@ function Indicador({ tipo_ronda }) {
                 backButton={
                   <button
                     onClick={handleBack}
-                    className="Button azul"
+                    className="Button azul button-stepper"
                     disabled={step === 0}
                   >
                     <KeyboardArrowLeft />
@@ -456,99 +466,104 @@ function Indicador({ tipo_ronda }) {
             )}
           </div>
         </div>
-        <div
-          className={`total-indicadores ${estado_panel_finalizar && "active"}`}
-        >
-          <Fab
-            className={`fab azul ${finalizar && "hidden"}`}
-            onClick={() => setEstadoPanelFinalizar(!estado_panel_finalizar)}
+        <Hidden smDown>
+          <div
+            className={`total-indicadores ${
+              estado_panel_finalizar && "active"
+            }`}
           >
-            {!estado_panel_finalizar ? (
-              <ArrowBackIos></ArrowBackIos>
-            ) : (
-              <ArrowForwardIos></ArrowForwardIos>
-            )}
-          </Fab>
-          <div className="informacion">
-            {loading ? (
-              Array(6)
-                .fill()
-                .map((elem, index) => (
-                  <div key={index}>
-                    <Skeleton marginTop="1.5rem" />
-                    <Skeleton marginTop="1rem" height=".5rem" />
-                  </div>
-                ))
-            ) : (
-              <List className="lista-indicadores">
-                {indicadores.map((indicador) => {
-                  let voto = indicador.voto.tipo_voto;
-                  //console.log("valor voto>>>", voto);
-                  let opcion =
-                    voto === null
-                      ? { label: "Sin seleccionar" }
-                      : opciones.find((opcion) => opcion.value == voto);
-                  //console.log("valor opcion>>>", opcion);
-                  return (
-                    <ListItem key={indicador.id}>
-                      <ListItemText
-                        primary={indicador.nombre}
-                        secondary={opcion?.label}
-                      />
-                    </ListItem>
-                  );
-                })}
-                {propuestas.length ? (
-                  <>
-                    <Divider />
-                    <ListSubheader>Propuestas</ListSubheader>
-                  </>
-                ) : null}
-
-                {propuestas.map((propuesta, index) => (
-                  <ListItem key={index}>
-                    <ListItemText
-                      primary={propuesta.nombre}
-                      secondary={propuesta.razon_no}
-                    />
-                    <ListItemSecondaryAction>
-                      <IconButton
-                        edge="end"
-                        aria-label="eliminar"
-                        onClick={() => {
-                          handleDeletePropuesta(index);
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </ListItemSecondaryAction>
-                  </ListItem>
-                ))}
-              </List>
-            )}
-            <div
-              className={`bottom_button ${
-                estado_panel_finalizar ? "active" : ""
-              }`}
+            <Fab
+              className={`fab azul ${finalizar && "hidden"}`}
+              onClick={() => setEstadoPanelFinalizar(!estado_panel_finalizar)}
             >
-              {tipo_ronda === "indicador" ? (
-                <button
-                  className="Button"
-                  onClick={() => setDialogPropuesta(true)}
-                >
-                  Proponer
-                </button>
-              ) : null}
-              <LoadingButton
-                className="Button azul"
-                loading={sending}
-                text="Finalizar"
-                loading_text="Enviando"
-                onClick={handleSalir}
-              />
+              {!estado_panel_finalizar ? (
+                <ArrowBackIos></ArrowBackIos>
+              ) : (
+                <ArrowForwardIos></ArrowForwardIos>
+              )}
+            </Fab>
+            <div className="informacion y-scroll">
+              {loading ? (
+                Array(6)
+                  .fill()
+                  .map((elem, index) => (
+                    <div key={index}>
+                      <Skeleton marginTop="1.5rem" />
+                      <Skeleton marginTop="1rem" height=".5rem" />
+                    </div>
+                  ))
+              ) : (
+                <List className="lista-indicadores">
+                  {indicadores.map((indicador) => {
+                    let voto = indicador.voto.tipo_voto;
+                    //console.log("valor voto>>>", voto);
+                    let opcion =
+                      voto === null
+                        ? { label: "Sin seleccionar" }
+                        : opciones.find((opcion) => opcion.value == voto);
+                    //console.log("valor opcion>>>", opcion);
+                    return (
+                      <ListItem key={indicador.id}>
+                        <ListItemText
+                          primary={indicador.nombre}
+                          secondary={opcion?.label}
+                        />
+                      </ListItem>
+                    );
+                  })}
+                  {propuestas.length ? (
+                    <>
+                      <Divider />
+                      <ListSubheader>Propuestas</ListSubheader>
+                    </>
+                  ) : null}
+
+                  {propuestas.map((propuesta, index) => (
+                    <ListItem key={index}>
+                      <ListItemText
+                        primary={propuesta.nombre}
+                        secondary={propuesta.razon_no}
+                      />
+                      <ListItemSecondaryAction>
+                        <IconButton
+                          edge="end"
+                          aria-label="eliminar"
+                          onClick={() => {
+                            handleDeletePropuesta(index);
+                          }}
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </ListItemSecondaryAction>
+                    </ListItem>
+                  ))}
+                </List>
+              )}
+              <div
+                className={`bottom_button sticky-bottom ${
+                  estado_panel_finalizar ? "active" : ""
+                }`}
+              >
+                {tipo_ronda === "indicador" ? (
+                  <button
+                    disabled={propuestas.length == 2}
+                    className="Button"
+                    onClick={() => setDialogPropuesta(true)}
+                  >
+                    Proponer
+                  </button>
+                ) : null}
+                <LoadingButton
+                  className="Button azul"
+                  loading={sending}
+                  text="Finalizar"
+                  loading_text="Enviando"
+                  onClick={handleSalir}
+                />
+              </div>
             </div>
           </div>
-        </div>
+        </Hidden>
       </Paper>
       {
         <Instruccion

@@ -77,4 +77,14 @@ a:hover {
 .img-responsive {
   max-width: 100%;
   height: auto;
+  max-height: 25rem;
+}
+
+.sticky-bottom {
+  position: sticky;
+  bottom: 0;
+}
+
+.y-scroll {
+  overflow-y: auto;
 }

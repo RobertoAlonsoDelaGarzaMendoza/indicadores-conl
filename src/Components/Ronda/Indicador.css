@@ -1,8 +1,15 @@
 .RondaPanel {
   margin-left: 10%;
   margin-right: 10%;
-  margin-top: 3rem;
-  margin-bottom: 3rem;
+  /* margin-top: 3rem; */
+  /*   margin-bottom: 3rem; */
+}
+
+@media only screen and (max-width: 480px) {
+  .RondaPanel {
+    margin-left: 5%;
+    margin-right: 5%;
+  }
 }
 
 .RondaPanel .Login_logo_section {
@@ -26,7 +33,7 @@
   background-color: #00b1b0 !important;
 }
 .MuiSlider-rail {
-  background-color: #00b1b0  !important;
+  background-color: #00b1b0 !important;
 }
 .MuiSlider-track {
   background-color: #00b1b0 !important;
@@ -62,8 +69,8 @@
 }
 .RondaPanel .panel_card {
   display: flex;
-  min-height: 70vh;
-  max-height: 70vh;
+  min-height: 80vh;
+  max-height: 80vh;
   overflow-y: hidden;
 }
 
@@ -79,7 +86,7 @@
   opacity: 1;
 }
 
-.RondaPanel .infografia.meta {
+/* .RondaPanel .infografia.meta {
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -88,7 +95,7 @@
 
 .RondaPanel .infografia .informacion {
   flex: 1;
-}
+} */
 
 .RondaPanel .indicador .form {
   display: flex;
@@ -99,6 +106,11 @@
 .RondaPanel .informacion .bottom_button {
   transition: 200ms ease-in-out;
   opacity: 0;
+}
+@media only screen and (max-width:600px){
+  .button-stepper{
+    font-size: 0;
+  }
 }
 
 .RondaPanel .informacion .bottom_button.active {

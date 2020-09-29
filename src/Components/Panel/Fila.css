@@ -7,10 +7,19 @@
 
 .nombre{
     flex: 80%;
+    margin:0 1rem;
+    font-weight: 700;
+}
+
+.Indicador.subfila > .nombre{
+    padding-left: 2.5rem;
+    font-weight: 400;
 }
 
 .estatus{
     flex:20%;
+    display: flex;
+    justify-content: center;
 }
 
 .estatus .Button{

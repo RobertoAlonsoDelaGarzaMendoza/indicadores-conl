@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 
 
 
-function Fila({ nombre,estatus,link }) {
+function Fila({ nombre,estatus,link ,subfila =false}) {
 
   return (
-    <div className="Indicador">
+    <div className={`Indicador ${subfila && "subfila"}`}>
       <div className="nombre">
-        <a className="PanelUsuario_link">{nombre}</a>
+        {nombre}
       </div>
 
       <div className="estatus">
