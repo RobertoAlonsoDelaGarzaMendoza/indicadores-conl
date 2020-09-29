@@ -49,8 +49,15 @@ function Login() {
       })
       .catch((error) => {
         setLoading(false);
-        console.log("error>>>", error);
-        showSnackbar(error.message);
+        if (error.response) {
+          console.log(error.response.data);
+          showSnackbar(error.response.data.mesage);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error>>>", error.message);
+          showSnackbar(error.message);
+        }
       })
       .then(() => {});
   };

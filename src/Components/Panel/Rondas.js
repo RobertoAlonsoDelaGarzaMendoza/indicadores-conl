@@ -1,3 +1,4 @@
+import { Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -17,6 +18,13 @@ function Rondas() {
   const [rondas, setFilaRondas] = useState([]);
   const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
+  const [message_snackbar, setMessageSnackbar] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const showSnackbar = (message) => {
+    setMessage(message);
+    setMessageSnackbar(true);
+  };
 
   const handleSalir = () => {
     dispatch(deleteToken());
@@ -54,8 +62,15 @@ function Rondas() {
         }
       })
       .catch((error) => {
-        setLoading(false);
-        console.log(error.message);
+        if (error.response) {
+          console.log(error.response.data);
+          showSnackbar(error.response.data.mesage);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error>>>", error.message);
+          showSnackbar(error.message);
+        }
       });
   }, []);
 
@@ -75,6 +90,15 @@ function Rondas() {
           Salir
         </button>
       </div>
+      {/* Snackbar section */}
+      <Snackbar
+        message={message}
+        open={message_snackbar}
+        autoHideDuration={5000}
+        onClose={() => {
+          setMessageSnackbar(false);
+        }}
+      />
     </Panel>
   );
 }

@@ -18,6 +18,7 @@ import {
   IconButton,
   Hidden,
   Grid,
+  Snackbar,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
@@ -48,6 +49,13 @@ function Indicador({ tipo_ronda }) {
   const [dialog_propuesta, setDialogPropuesta] = useState(false);
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [message_snackbar, setMessageSnackbar] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const showSnackbar = (message) => {
+    setMessage(message);
+    setMessageSnackbar(true);
+  };
 
   useEffect(() => {
     //console.log("ronda>>>", ronda);
@@ -262,7 +270,15 @@ function Indicador({ tipo_ronda }) {
         })
         .catch((error) => {
           setSending(false);
-          console.log(error.message);
+          if (error.response) {
+            console.log(error.response.data);
+            showSnackbar(error.response.data.mesage);
+          } else if (error.request) {
+            console.log(error.request);
+          } else {
+            console.log("Error>>>", error.message);
+            showSnackbar(error.message);
+          }
         });
     }
   };
@@ -580,6 +596,15 @@ function Indicador({ tipo_ronda }) {
         handleClose={() => setDialogPropuesta(false)}
         propuestas={propuestas}
         setPropuestas={setPropuestas}
+      />
+      {/* Snackbar section */}
+      <Snackbar
+        message={message}
+        open={message_snackbar}
+        autoHideDuration={5000}
+        onClose={() => {
+          setMessageSnackbar(false);
+        }}
       />
     </div>
   );

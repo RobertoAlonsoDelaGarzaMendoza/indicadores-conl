@@ -1,3 +1,4 @@
+import { Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -16,6 +17,13 @@ function Ronda() {
   const [objetivos, setObjetivos] = useState([]);
   // const [lineas, setLineas] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [message_snackbar, setMessageSnackbar] = useState(false);
+  const [message, setMessage] = useState("");
+
+  const showSnackbar = (message) => {
+    setMessage(message);
+    setMessageSnackbar(true);
+  };
 
   const getTipoRonda = (tipo_ronda) => {
     switch (tipo_ronda) {
@@ -47,7 +55,7 @@ function Ronda() {
                 return {
                   id: aspiracion.id,
                   nombre: aspiracion.descripcion,
-                  estatus: 0, //aspiracion.estatus,
+                  estatus: aspiracion.estatus,
                   link: `/${getTipoRonda(t_ronda.tipo_ronda)}/aspiracion/${
                     aspiracion.id
                   }`,
@@ -61,7 +69,7 @@ function Ronda() {
                 return {
                   id: objetivo.id,
                   nombre: objetivo.descripcion,
-                  estatus: 0, //objetivo.estatus,
+                  estatus: objetivo.estatus,
                   link: `/${getTipoRonda(t_ronda.tipo_ronda)}/objetivo/${
                     objetivo.id
                   }`,
@@ -69,7 +77,7 @@ function Ronda() {
                     return {
                       id: linea.id,
                       nombre: linea.descripcion,
-                      estatus: 0, //objetivo.estatus,
+                      estatus: linea.estatus,
                       link: `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
                         linea.id
                       }`,
@@ -98,7 +106,15 @@ function Ronda() {
       })
       .catch((error) => {
         setLoading(false);
-        console.log(error);
+        if (error.response) {
+          console.log(error.response.data);
+          showSnackbar(error.response.data.mesage);
+        } else if (error.request) {
+          console.log(error.request);
+        } else {
+          console.log("Error>>>", error.message);
+          showSnackbar(error.message);
+        }
       });
   }, []);
 
@@ -132,6 +148,15 @@ function Ronda() {
           <button className="Button azul">Salir</button>
         </Link>
       </div>
+      {/* Snackbar section */}
+      <Snackbar
+        message={message}
+        open={message_snackbar}
+        autoHideDuration={5000}
+        onClose={() => {
+          setMessageSnackbar(false);
+        }}
+      />
     </Panel>
   );
 }
