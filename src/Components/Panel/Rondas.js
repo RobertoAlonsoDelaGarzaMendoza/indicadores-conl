@@ -39,7 +39,7 @@ function Rondas() {
     Api.get("/ronda")
       .then((response) => {
         setLoading(false);
-        console.log(response);
+        //console.log(response);
         switch (response.status) {
           case 200:
             let rondas = response.data.rondas;

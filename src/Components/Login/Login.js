@@ -32,7 +32,7 @@ function Login() {
     })
       .then((response) => {
         setLoading(false);
-        console.log("correct >>>", response);
+        //console.log("correct >>>", response);
         switch (response.status) {
           case 200:
             Api.defaults.headers.common[

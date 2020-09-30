@@ -32,7 +32,7 @@ function PropuestaForm({
   const handleSubmit = (e) => {
     e.preventDefault();
     if (nombre && justificacion) {
-      console.log("tipo >>>", tipo);
+      // console.log("tipo >>>", tipo);
       setPropuestas([
         ...propuestas,
         {

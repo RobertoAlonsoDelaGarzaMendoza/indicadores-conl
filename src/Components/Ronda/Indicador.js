@@ -38,6 +38,7 @@ import Skeleton from "../Helpers/Skeleton";
 
 function Indicador({ tipo_ronda }) {
   let { tipo, idIndicador } = useParams();
+  let history = useHistory();
   const ronda = useSelector((state) => state.ronda);
   const [indicador, setIndicador] = useState("");
   const [mostrar_cuadro_razon, setMostraRazon] = useState(false);
@@ -84,13 +85,12 @@ function Indicador({ tipo_ronda }) {
       }`
     )
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         switch (response.status) {
           case 200:
             let data = response.data;
             setIndicador(data.descripcion);
             setIndicadores(buildIndicadores(data.indicadors, tipo_ronda));
-            console.log(indicadores);
             setLoading(false);
             break;
           default:
@@ -137,7 +137,7 @@ function Indicador({ tipo_ronda }) {
             voto: {
               ...voto,
               tipo_voto: `${voto.tipo_voto}`,
-              tipo_voto: voto.certeza,
+              razon_no: voto.certeza,
             },
           };
         });
@@ -189,8 +189,6 @@ function Indicador({ tipo_ronda }) {
           },
         ];
 
-  let history = useHistory();
-
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -213,7 +211,6 @@ function Indicador({ tipo_ronda }) {
   };
 
   const handleInput = (e) => {
-    console.log(e);
     let indicador = indicadores[step];
     switch (e.target.type) {
       case "radio":
@@ -269,7 +266,7 @@ function Indicador({ tipo_ronda }) {
       Promise.all(sends)
         .then((results) => {
           setSending(false);
-          console.log(results);
+          //console.log(results);
           history.push(`/ronda/${ronda.id}`);
         })
         .catch((error) => {
@@ -345,7 +342,7 @@ function Indicador({ tipo_ronda }) {
             <ArrowBackIcon />
             salir
           </button> */}
-          <h2 className="font-morado">{loading ? <Skeleton /> : indicador}</h2>
+          <h2>{loading ? <Skeleton /> : indicador}</h2>
           <h3 className="font-morado">
             {loading ? <Skeleton /> : indicadores[step]?.nombre}
           </h3>
@@ -422,8 +419,10 @@ function Indicador({ tipo_ronda }) {
                   <Skeleton marginTop="1rem" />
                 ) : (
                   <p>
-                    ¿Considera usted que este indicador contribuye a monitorear
-                    el avance?
+                    {`¿Considera usted que este indicador contribuye a monitorear
+                    el avance ${tipo !== "objetivo" ? "de la" : "del"} ${
+                      tipo == "linea" ? "línea estrategica" : tipo
+                    }?`}
                   </p>
                 )}
                 {loading ? (
@@ -447,7 +446,7 @@ function Indicador({ tipo_ronda }) {
                   </RadioGroup>
                 )}
                 <textarea
-                  autoFocus={true}
+                  autoFocus={mostrar_cuadro_razon}
                   type="textarea"
                   value={indicadores[step]?.voto.razon_no}
                   onChange={handleInput}
@@ -472,7 +471,7 @@ function Indicador({ tipo_ronda }) {
                   <button
                     onClick={handleNext}
                     className="Button azul button-stepper"
-                    disabled={step === indicadores.length - 1}
+                    disabled={(indicadores[step]?.voto.tipo_voto == "1" && indicadores[step]?.voto.razon_no === "") || step === indicadores.length - 1}
                   >
                     siguiente
                     <KeyboardArrowRight />

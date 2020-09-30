@@ -31,6 +31,8 @@ function Ronda() {
         return "indicador";
       case 1:
         return "meta";
+      default:
+        break;
     }
   };
 
@@ -46,7 +48,7 @@ function Ronda() {
     })
       .then((response) => {
         setLoading(false);
-        console.log(response);
+        //console.log(response);
         switch (response.status) {
           case 200:
             let aspiraciones = response.data.aspiraciones;
@@ -56,9 +58,11 @@ function Ronda() {
                   id: aspiracion.id,
                   nombre: aspiracion.descripcion,
                   estatus: aspiracion.estatus,
-                  link: `/${getTipoRonda(t_ronda.tipo_ronda)}/aspiracion/${
-                    aspiracion.id
-                  }`,
+                  link: aspiracion.indicadiresMeta
+                    ? `/${getTipoRonda(t_ronda.tipo_ronda)}/aspiracion/${
+                        aspiracion.id
+                      }`
+                    : null,
                 };
               })
             );
@@ -70,17 +74,21 @@ function Ronda() {
                   id: objetivo.id,
                   nombre: objetivo.descripcion,
                   estatus: objetivo.estatus,
-                  link: `/${getTipoRonda(t_ronda.tipo_ronda)}/objetivo/${
-                    objetivo.id
-                  }`,
+                  link: objetivo.indicadiresMeta
+                    ? `/${getTipoRonda(t_ronda.tipo_ronda)}/objetivo/${
+                        objetivo.id
+                      }`
+                    : null,
                   subfilas: objetivo.lineasEstrategicas?.map((linea) => {
                     return {
                       id: linea.id,
                       nombre: linea.descripcion,
                       estatus: linea.estatus,
-                      link: `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
-                        linea.id
-                      }`,
+                      link: linea.indicadiresMeta
+                        ? `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
+                            linea.id
+                          }`
+                        : null,
                     };
                   }),
                 };

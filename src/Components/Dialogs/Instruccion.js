@@ -11,7 +11,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const getInstruccion = (ronda) => {
-  console.log(ronda);
+  //console.log(ronda);
   switch (ronda) {
     case "1":
       return <Ronda1 />;
