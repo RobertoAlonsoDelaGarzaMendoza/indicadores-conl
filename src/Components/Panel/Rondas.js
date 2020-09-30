@@ -43,7 +43,7 @@ function Rondas() {
         switch (response.status) {
           case 200:
             let rondas = response.data.rondas;
-            console.log("rondas>>>", rondas);
+            //console.log("rondas>>>", rondas);
             setFilaRondas(
               rondas.map((ronda) => {
                 return {
