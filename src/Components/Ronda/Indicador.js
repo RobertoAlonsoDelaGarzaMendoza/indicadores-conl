@@ -19,6 +19,7 @@ import {
   Hidden,
   Grid,
   Snackbar,
+  Tooltip,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
@@ -51,6 +52,9 @@ function Indicador({ tipo_ronda }) {
   const [sending, setSending] = useState(false);
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
+
+  let tooltip_propuesta =
+    "Agregar un nuevo indicador diferente a los mostrados";
 
   const showSnackbar = (message) => {
     setMessage(message);
@@ -173,7 +177,7 @@ function Indicador({ tipo_ronda }) {
       : [
           {
             value: "0",
-            label: "SI",
+            label: "SÍ",
           },
           {
             value: "1",
@@ -346,10 +350,16 @@ function Indicador({ tipo_ronda }) {
             {loading ? <Skeleton /> : indicadores[step]?.nombre}
           </h3>
           <Grid container alignItems="center">
-            <Grid item sm={12} md={6}>
+            <Grid
+              item
+              sm={12}
+              md="auto"
+              alignItems="center"
+              alignContent="center"
+            >
               <Carusel loading={loading} imagenes={indicadores[step]?.images} />
             </Grid>
-            <Grid item sm={12} md={6}>
+            <Grid item sm={12} md="auto">
               <div className="informacion">
                 <div className="informacion_dialogo">
                   {loading ? (
@@ -359,8 +369,8 @@ function Indicador({ tipo_ronda }) {
                     </>
                   ) : (
                     <>
-                      <p>{indicadores[step]?.definicion}</p>
-                      <p>{indicadores[step]?.fuente}</p>
+                      <p className="bold">{indicadores[step]?.definicion}</p>
+                      <p>Fuente: {indicadores[step]?.fuente}</p>
                     </>
                   )}
                 </div>
@@ -561,13 +571,15 @@ function Indicador({ tipo_ronda }) {
                 }`}
               >
                 {tipo_ronda === "indicador" ? (
-                  <button
-                    disabled={propuestas.length == 2}
-                    className="Button"
-                    onClick={() => setDialogPropuesta(true)}
-                  >
-                    Proponer
-                  </button>
+                  <Tooltip arrow placement="bottom" title={tooltip_propuesta}>
+                    <button
+                      disabled={propuestas.length == 2}
+                      className="Button"
+                      onClick={() => setDialogPropuesta(true)}
+                    >
+                      Proponer
+                    </button>
+                  </Tooltip>
                 ) : null}
                 <LoadingButton
                   className="Button azul"

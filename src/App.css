@@ -11,6 +11,10 @@ body {
   color: #333333 !important;
 }
 
+.bold{
+  font-weight: 700;
+}
+
 .Button {
   background-color: #5a2149;
   color: #ffffff;

@@ -9,7 +9,7 @@ function UserHeader() {
       <div className="informacion">
         <h2 className="usuario_informacion">{`Bienvenid${
           user.sexo ? "a" : "o"
-        } Usuari${user.sexo ? "a" : "o"}:`}</h2>
+        }`}</h2>
         <h2 className="usuario_informacion nombre">{user.nombre}</h2>
         <h2 className="usuario_informacion puesto"> {user.puesto}</h2>
       </div>

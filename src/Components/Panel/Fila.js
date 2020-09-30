@@ -20,7 +20,7 @@ function Fila({ nombre,estatus,link ,subfila =false}) {
         ) : (
           <Link className="link_router" to={link}>
             <button className={estatus ? "Button Proceso" : "Button"}>
-              {estatus ? "En proceso" : "Completar"}
+              {estatus ? "En proceso" : "Comenzar"}
             </button>
           </Link>
         )}

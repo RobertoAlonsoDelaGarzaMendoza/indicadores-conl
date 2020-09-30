@@ -13,16 +13,20 @@ function Lista({ loading, filas, nombre, titulo, titulo_accion }) {
       </div>
       {loading ? (
         <Skeleton />
-      ) : (
+      ) : filas.length ? (
         filas.map((fila) => {
-          let subfilas =fila.subfilas !==undefined ? fila.subfilas.map((subfila) => (
-            <Fila
-              subfila={true}
-              key={subfila.id}
-              nombre={subfila.nombre}
-              estatus={subfila.estatus}
-              link={subfila.link}
-            />)):null
+          let subfilas =
+            fila.subfilas !== undefined
+              ? fila.subfilas.map((subfila) => (
+                  <Fila
+                    subfila={true}
+                    key={subfila.id}
+                    nombre={subfila.nombre}
+                    estatus={subfila.estatus}
+                    link={subfila.link}
+                  />
+                ))
+              : null;
           return (
             <>
               <Fila
@@ -35,6 +39,8 @@ function Lista({ loading, filas, nombre, titulo, titulo_accion }) {
             </>
           );
         })
+      ) : (
+        <h4>Sin elementos</h4>
       )}
     </div>
   );

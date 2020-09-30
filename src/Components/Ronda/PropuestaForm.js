@@ -62,7 +62,7 @@ function PropuestaForm({
       <DialogTitle>Propuesta de nuevo indicador</DialogTitle>
       <DialogContent>
         <DialogContentText>
-          ¿Qué otro indicador considera que deben incluirse?
+          ¿Qué otro indicador considera que debe incluirse?
         </DialogContentText>
         <form className="propuesta_dialog_form" onSubmit={handleSubmit}>
           <input

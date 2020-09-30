@@ -126,13 +126,13 @@ function Ronda() {
       <Lista
         nombre={ronda.descripcion}
         loading={loading}
-        titulo="Aspiración"
+        titulo="Aspiraciones"
         titulo_accion="Estado"
         filas={aspiraciones}
       />
       <Lista
         loading={loading}
-        titulo="Objectivo"
+        titulo="Objectivos y líneas estratégicas"
         titulo_accion="Estado"
         filas={objetivos}
       />
