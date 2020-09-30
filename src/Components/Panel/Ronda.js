@@ -58,7 +58,7 @@ function Ronda() {
                   id: aspiracion.id,
                   nombre: aspiracion.descripcion,
                   estatus: aspiracion.estatus,
-                  link: aspiracion.indicadiresMeta
+                  link: aspiracion.indicadoresMeta
                     ? `/${getTipoRonda(t_ronda.tipo_ronda)}/aspiracion/${
                         aspiracion.id
                       }`
@@ -74,7 +74,7 @@ function Ronda() {
                   id: objetivo.id,
                   nombre: objetivo.descripcion,
                   estatus: objetivo.estatus,
-                  link: objetivo.indicadiresMeta
+                  link: objetivo.indicadoresMeta
                     ? `/${getTipoRonda(t_ronda.tipo_ronda)}/objetivo/${
                         objetivo.id
                       }`
@@ -84,7 +84,7 @@ function Ronda() {
                       id: linea.id,
                       nombre: linea.descripcion,
                       estatus: linea.estatus,
-                      link: linea.indicadiresMeta
+                      link: linea.indicadoresMeta
                         ? `/${getTipoRonda(t_ronda.tipo_ronda)}/linea/${
                             linea.id
                           }`

@@ -26,7 +26,6 @@ function Login() {
   const handleSubmit = (e) => {
     e.preventDefault();
     setLoading(true);
-    // TODO logica para login y falso
     Api.post("/login", {
       email: email,
     })

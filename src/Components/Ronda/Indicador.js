@@ -111,7 +111,7 @@ function Indicador({ tipo_ronda }) {
             ? indicador.votos[0]
             : {
                 id: null,
-                tipo_voto: "",
+                tipo_voto: "99",
                 razon_no: "",
               };
           return {
@@ -128,7 +128,7 @@ function Indicador({ tipo_ronda }) {
             ? indicador.meta[0]
             : {
                 id: null,
-                tipo_voto: 0,
+                tipo_voto: "99",
                 razon_no: "",
                 valor_meta: "",
               };
@@ -162,15 +162,15 @@ function Indicador({ tipo_ronda }) {
     tipo_ronda == "meta"
       ? [
           {
-            value: 0,
+            value: "0",
             label: "POCO",
           },
           {
-            value: 1,
+            value: "1",
             label: "REGULAR",
           },
           {
-            value: 2,
+            value: "2",
             label: "ALTA",
           },
         ]
@@ -285,7 +285,18 @@ function Indicador({ tipo_ronda }) {
   };
 
   const enviarVotos = () => {
-    return Api.put(`/voto/${ronda.id}`, indicadores);
+    return Api.put(
+      `/voto/${ronda.id}`,
+      indicadores.map((indicador) => {
+        return {
+          ...indicador,
+          voto: {
+            ...indicador.voto,
+            tipo_voto: indicador.voto.tipo_voto * 1,
+          },
+        };
+      })
+    );
   };
 
   const enviarMetas = () => {
@@ -296,6 +307,7 @@ function Indicador({ tipo_ronda }) {
           ...indicador,
           meta: {
             ...indicador.voto,
+            tipo_voto: indicador.voto.tipo_voto * 1,
             certeza: indicador.voto.tipo_voto,
             comentario: indicador.voto.razon_no,
           },
@@ -347,13 +359,7 @@ function Indicador({ tipo_ronda }) {
             {loading ? <Skeleton /> : indicadores[step]?.nombre}
           </h3>
           <Grid container alignItems="center">
-            <Grid
-              item
-              sm={12}
-              md="auto"
-              alignItems="center"
-              alignContent="center"
-            >
+            <Grid item sm={12} md="auto">
               <Carusel loading={loading} imagenes={indicadores[step]?.images} />
             </Grid>
             <Grid item sm={12} md="auto">
@@ -393,58 +399,40 @@ function Indicador({ tipo_ronda }) {
                 )}
               </div>
             )}
-            {tipo_ronda === "meta" ? (
-              <div>
-                {loading ? (
-                  <Skeleton marginTop="1rem" />
-                ) : (
-                  <p>¿Qué tan probable es alcanzar la meta planteada?​</p>
-                )}
-                {loading ? (
-                  <Skeleton />
-                ) : (
-                  <Slider
-                    value={indicadores[step]?.voto.tipo_voto}
-                    step={null}
-                    valueLabelDisplay="off"
-                    marks={opciones}
-                    max={opciones.length - 1}
-                    onChange={handleSlide}
-                  />
-                )}
-              </div>
-            ) : (
-              <div>
-                {loading ? (
-                  <Skeleton marginTop="1rem" />
-                ) : (
-                  <p>
-                    {`¿Considera usted que este indicador contribuye a monitorear
+            <div>
+              {loading ? (
+                <Skeleton marginTop="1rem" />
+              ) : tipo_ronda === "meta" ? (
+                <p>¿Qué tan probable es alcanzar la meta planteada?​</p>
+              ) : (
+                <p>
+                  {`¿Considera usted que este indicador contribuye a monitorear
                     el avance ${tipo !== "objetivo" ? "de la" : "del"} ${
-                      tipo == "linea" ? "línea estrategica" : tipo
-                    }?`}
-                  </p>
-                )}
-                {loading ? (
-                  <Skeleton marginTop="1rem" />
-                ) : (
-                  <RadioGroup
-                    className="opciones_ronda"
-                    aria-label="gender"
-                    name="inclusion"
-                    value={indicadores[step]?.voto.tipo_voto}
-                    onChange={handleInput}
-                  >
-                    {opciones.map((opcion, index) => (
-                      <FormControlLabel
-                        key={index}
-                        value={opcion.value}
-                        control={<Radio />}
-                        label={opcion.label}
-                      />
-                    ))}
-                  </RadioGroup>
-                )}
+                    tipo == "linea" ? "línea estrategica" : tipo
+                  }?`}
+                </p>
+              )}
+              {loading ? (
+                <Skeleton marginTop="1rem" />
+              ) : (
+                <RadioGroup
+                  className="opciones_ronda"
+                  aria-label="gender"
+                  name="inclusion"
+                  value={indicadores[step]?.voto.tipo_voto}
+                  onChange={handleInput}
+                >
+                  {opciones.map((opcion, index) => (
+                    <FormControlLabel
+                      key={index}
+                      value={opcion.value}
+                      control={<Radio />}
+                      label={opcion.label}
+                    />
+                  ))}
+                </RadioGroup>
+              )}
+              {tipo_ronda === "indicador" && (
                 <textarea
                   autoFocus={mostrar_cuadro_razon}
                   type="textarea"
@@ -455,8 +443,8 @@ function Indicador({ tipo_ronda }) {
                   }
                   placeholder="Escriba las razones por las cuales no debería incluirse este indicador: ​"
                 ></textarea>
-              </div>
-            )}
+              )}
+            </div>
           </div>
           <div className="sticky-bottom">
             {loading ? (
@@ -471,7 +459,11 @@ function Indicador({ tipo_ronda }) {
                   <button
                     onClick={handleNext}
                     className="Button azul button-stepper"
-                    disabled={(indicadores[step]?.voto.tipo_voto == "1" && indicadores[step]?.voto.razon_no === "") || step === indicadores.length - 1}
+                    disabled={
+                      (indicadores[step]?.voto.tipo_voto == "1" &&
+                        indicadores[step]?.voto.razon_no === "") ||
+                      step === indicadores.length - 1
+                    }
                   >
                     siguiente
                     <KeyboardArrowRight />
