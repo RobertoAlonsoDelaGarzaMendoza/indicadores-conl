@@ -111,7 +111,7 @@ function Indicador({ tipo_ronda }) {
             ? indicador.votos[0]
             : {
                 id: null,
-                tipo_voto: "",
+                tipo_voto: "99",
                 razon_no: "",
               };
           return {
@@ -128,6 +128,7 @@ function Indicador({ tipo_ronda }) {
             ? indicador.meta[0]
             : {
                 id: null,
+                //TODO Agregar valor numerico negatico
                 tipo_voto: 0,
                 razon_no: "",
                 valor_meta: "",
@@ -285,7 +286,10 @@ function Indicador({ tipo_ronda }) {
   };
 
   const enviarVotos = () => {
-    return Api.put(`/voto/${ronda.id}`, indicadores);
+    return Api.put(
+      `/voto/${ronda.id}`,
+      indicadores.map((indicador) => {})
+    );
   };
 
   const enviarMetas = () => {
@@ -471,7 +475,11 @@ function Indicador({ tipo_ronda }) {
                   <button
                     onClick={handleNext}
                     className="Button azul button-stepper"
-                    disabled={(indicadores[step]?.voto.tipo_voto == "1" && indicadores[step]?.voto.razon_no === "") || step === indicadores.length - 1}
+                    disabled={
+                      (indicadores[step]?.voto.tipo_voto == "1" &&
+                        indicadores[step]?.voto.razon_no === "") ||
+                      step === indicadores.length - 1
+                    }
                   >
                     siguiente
                     <KeyboardArrowRight />
