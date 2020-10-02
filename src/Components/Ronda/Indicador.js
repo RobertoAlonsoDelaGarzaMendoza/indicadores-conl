@@ -359,10 +359,10 @@ function Indicador({ tipo_ronda }) {
             {loading ? <Skeleton /> : indicadores[step]?.nombre}
           </h3>
           <Grid container alignItems="center">
-            <Grid item sm={12} md="auto">
+            <Grid item sm={12} md={indicadores[step]?.images ? 6 : "auto"}>
               <Carusel loading={loading} imagenes={indicadores[step]?.images} />
             </Grid>
-            <Grid item sm={12} md="auto">
+            <Grid item sm={12} md={6}>
               <div className="informacion">
                 <div className="informacion_dialogo">
                   {loading ? (
