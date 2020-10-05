@@ -1,0 +1,5 @@
+.Drawer > .MuiDrawer-paper{
+    max-width: 15rem;
+    width: 15rem;
+    padding: .5rem;
+}
