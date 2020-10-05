@@ -9,35 +9,38 @@ import Ronda from "./Components/Panel/Ronda";
 import PrivateRoute from "./Components/Helpers/PrivateRoute";
 import { useSelector } from "react-redux";
 import Admin from "./Components/Admin/Admin";
+import CustomThemeProvider from "./MuiTheme/CustomThemeProvider";
 
 function App() {
   const auth = useSelector((state) => state.isLogged);
   return (
-    <div className="App">
-      <Header />
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            <Login />
-          </Route>
-          <Route path="/admin">
-            <Admin />
-          </Route>
-          <PrivateRoute auth={auth} path="/ronda/:id">
-            <Ronda />
-          </PrivateRoute>
-          <PrivateRoute auth={auth} path="/rondas">
-            <Rondas />
-          </PrivateRoute>
-          <PrivateRoute auth={auth} path="/indicador/:tipo/:idIndicador">
-            <Indicador tipo_ronda={"indicador"} />
-          </PrivateRoute>
-          <PrivateRoute auth={auth} path="/meta/:tipo/:idIndicador">
-            <Indicador tipo_ronda={"meta"} />
-          </PrivateRoute>
-        </Switch>
-      </Router>
-    </div>
+    <CustomThemeProvider>
+      <div className="App">
+        <Header />
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <Login />
+            </Route>
+            <Route path="/admin">
+              <Admin />
+            </Route>
+            <PrivateRoute auth={auth} path="/ronda/:id">
+              <Ronda />
+            </PrivateRoute>
+            <PrivateRoute auth={auth} path="/rondas">
+              <Rondas />
+            </PrivateRoute>
+            <PrivateRoute auth={auth} path="/indicador/:tipo/:idIndicador">
+              <Indicador tipo_ronda={"indicador"} />
+            </PrivateRoute>
+            <PrivateRoute auth={auth} path="/meta/:tipo/:idIndicador">
+              <Indicador tipo_ronda={"meta"} />
+            </PrivateRoute>
+          </Switch>
+        </Router>
+      </div>
+    </CustomThemeProvider>
   );
 }
 
