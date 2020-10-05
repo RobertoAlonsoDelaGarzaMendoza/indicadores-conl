@@ -60,3 +60,11 @@ export const loginOut = () => {
     type: "LOG_OUT",
   };
 };
+
+export const isAdmin = (bool) => {
+  return{
+    type:"ADMIN",
+    payload:bool,
+  }
+}
+
