@@ -7,8 +7,11 @@ import Indicador from "./Components/Ronda/Indicador";
 import Rondas from "./Components/Panel/Rondas";
 import Ronda from "./Components/Panel/Ronda";
 import PrivateRoute from "./Components/Helpers/PrivateRoute";
+import { useSelector } from "react-redux";
+import Admin from "./Components/Admin/Admin";
 
 function App() {
+  const auth = useSelector((state) => state.isLogged);
   return (
     <div className="App">
       <Header />
@@ -17,16 +20,19 @@ function App() {
           <Route exact path="/">
             <Login />
           </Route>
-          <PrivateRoute exact path="/ronda/:id">
+          <Route path="/admin">
+            <Admin />
+          </Route>
+          <PrivateRoute auth={auth} path="/ronda/:id">
             <Ronda />
           </PrivateRoute>
-          <PrivateRoute path="/rondas">
+          <PrivateRoute auth={auth} path="/rondas">
             <Rondas />
           </PrivateRoute>
-          <PrivateRoute exact path="/indicador/:tipo/:idIndicador">
+          <PrivateRoute auth={auth} path="/indicador/:tipo/:idIndicador">
             <Indicador tipo_ronda={"indicador"} />
           </PrivateRoute>
-          <PrivateRoute path="/meta/:tipo/:idIndicador">
+          <PrivateRoute auth={auth} path="/meta/:tipo/:idIndicador">
             <Indicador tipo_ronda={"meta"} />
           </PrivateRoute>
         </Switch>
