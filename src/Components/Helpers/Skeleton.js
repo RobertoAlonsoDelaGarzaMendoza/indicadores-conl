@@ -1,7 +1,7 @@
 import React from "react";
 import "./Skeleton.css";
 
-function Skeleton({ height = "20px", marginTop = "0", marginBottom = "0" }) {
+function Skeleton({ height = "20px", marginTop = ".5rem", marginBottom = ".5rem" }) {
   const configstyle = {
     height,
     marginTop,

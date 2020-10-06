@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../Assets/nuevo_leon_logo.svg";
 import Api from "../../Restful/Api";
-import { Snackbar } from "@material-ui/core";
+import { Snackbar, TextField, Typography } from "@material-ui/core";
 import { useHistory } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
@@ -14,6 +14,9 @@ function Login() {
   const [email, setEmail] = useState("");
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
+
+  //const {handleSubmit,control,errors} = useForm();
+
   const dispatch = useDispatch();
 
   let history = useHistory();
@@ -66,29 +69,32 @@ function Login() {
         <img alt="logo_nuevo_leon" className="Login_logo" src={logo}></img>
       </div>
       <div className="Login_Headlines">
-        <h1>
+        <Typography variant="h3">
           Plataforma participativa para la identificación de indicadores y metas
           del Plan Estratégico de Nuevo León
-        </h1>
-        <h2>Ingrese a la plataforma con su correo electrónico registrado</h2>
+        </Typography>
+        <Typography variant="h4">Ingrese a la plataforma con su correo electrónico registrado</Typography>
         <form
           className={loading ? "Login_form" : "Login_form"}
           onSubmit={handleSubmit}
         >
-          <div className="input_group">
-            <input
-              placeholder="correo electrónico"
-              type="text"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-          </div>
+          <TextField
+            name="email"
+            label="Email"
+            variant="filled"
+            required
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
           <LoadingButton
-            className="Button Login_button"
+            className="Login_button"
             loading={loading}
             text="Ingresar"
             loading_text="Cargando"
             onClick={handleSubmit}
+            color="primary"
+            variant="contained"
+            disableElevation
           />
         </form>
         <div className="Login_links">

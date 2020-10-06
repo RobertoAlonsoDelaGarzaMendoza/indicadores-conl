@@ -12,6 +12,11 @@
   }
 }
 
+.RondaPanel .indicador > *{
+  margin-top: 1rem;
+  margin-bottom: .5rem;
+}
+
 .RondaPanel .Login_logo_section {
   justify-content: space-between;
   align-items: center;
@@ -21,52 +26,32 @@
   margin: auto;
   flex: 1;
 }
-.MuiLinearProgress-colorPrimary {
-  background-color: lightgray !important;
-}
-
-.MuiLinearProgress-barColorPrimary {
-  background-color: #00b1b0 !important;
-}
-
-.MuiSlider-thumbColorPrimary {
-  background-color: #00b1b0 !important;
-}
-.MuiSlider-rail {
-  background-color: #00b1b0 !important;
-}
-.MuiSlider-track {
-  background-color: #00b1b0 !important;
-}
-
-.MuiMobileStepper-dotActive {
-  background-color: #00b1b0 !important;
-}
 
 .opciones_ronda {
   flex-direction: row !important;
   justify-content: center;
 }
 
-.Mui-checked {
-  color: #5a2149 !important;
+.RondaPanel .MuiAccordion-root {
+  width: 100%;
+  margin: 1rem 0 1rem 0;
+  box-shadow: none;
+}
+.RondaPanel .MuiAccordion-root::before{
+  content: none;
+}
+.RondaPanel .MuiAccordionSummary-root{
+  cursor: default;
 }
 
-.panel_razon {
-  height: 13rem;
-  max-height: 13rem;
-  width: 80%;
-  border: 2px solid #5a2149;
-  resize: none;
-  transition: 200ms ease-in-out;
+.RondaPanel .MuiAccordionSummary-content{
+  justify-content: center;
 }
 
-.panel_razon.oculto {
-  min-height: 0;
-  height: 0px;
-  padding: 0;
-  border: none;
+.RondaPanel .definicion_fuente{
+  margin: 0px 4rem;
 }
+
 .RondaPanel .panel_card {
   display: flex;
   min-height: 80vh;
@@ -86,17 +71,6 @@
   opacity: 1;
 }
 
-/* .RondaPanel .infografia.meta {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-evenly;
-}
-
-.RondaPanel .infografia .informacion {
-  flex: 1;
-} */
-
 .RondaPanel .indicador .form {
   display: flex;
   justify-content: space-evenly;
@@ -107,9 +81,9 @@
   transition: 200ms ease-in-out;
   opacity: 0;
 }
-@media only screen and (max-width:600px){
-  .button-stepper{
-    font-size: 0;
+@media only screen and (max-width: 600px) {
+  .button-stepper {
+    font-size: 0 !important;
   }
 }
 

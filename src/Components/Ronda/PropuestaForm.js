@@ -1,9 +1,11 @@
 import {
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
   DialogTitle,
+  TextField,
 } from "@material-ui/core";
 import React, { useState } from "react";
 
@@ -65,47 +67,57 @@ function PropuestaForm({
           ¿Qué otro indicador considera que debe incluirse?
         </DialogContentText>
         <form className="propuesta_dialog_form" onSubmit={handleSubmit}>
-          <input
+          <TextField
+            variant="filled"
+            fullWidth
             id="nombre"
             name="nombre"
             value={nombre}
-            required={true}
-            placeholder="Nombre del indicador *"
+            required
+            label="Nombre del indicador"
             onChange={(e) => setNombre(e.target.value)}
           />
-          <textarea
+          <TextField
+            variant="filled"
+            fullWidth
+            multiline
             id="razon"
             nombre="razon"
+            rows={4}
             value={justificacion}
-            required={true}
-            placeholder="¿Por qué incluir este nuevo indicador? *"
+            required
+            label="¿Por qué incluir este nuevo indicador?"
             onChange={(e) => setJustificacion(e.target.value)}
-          ></textarea>
-          <input
+          ></TextField>
+          <TextField
+            variant="filled"
+            fullWidth
             id="fuente"
             name="fuente"
             value={fuente}
             required={false}
-            placeholder="Fuente del indicador"
+            label="Fuente del indicador"
             onChange={(e) => setFuente(e.target.value)}
           />
-          <input
+          <TextField
+            variant="filled"
+            fullWidth
             id="direccion"
             name="direccion"
             value={url}
             required={false}
-            placeholder="Url o dirección donde podriamos encontrar informacion"
+            label="Url o dirección donde podriamos encontrar informacion"
             onChange={(e) => setUrl(e.target.value)}
           />
         </form>
       </DialogContent>
       <DialogActions>
-        <button onClick={handleClose} className="Button">
+        <Button onClick={handleClose} variant="contained" color="primary">
           Cancelar
-        </button>
-        <button onClick={handleSubmit} className="Button azul">
+        </Button>
+        <Button onClick={handleSubmit} variant="contained" color="secondary">
           Guardar
-        </button>
+        </Button>
       </DialogActions>
     </Dialog>
   );
