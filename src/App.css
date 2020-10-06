@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap");
 
-* {
+/* * {
   font-family: "PT Sans", sans-serif !important;
-}
+} */
 /* #5a2149 morado */
 /*#00b1b0 verde */
 /* #fdb913 amarillo */
 
 body {
-  color: #333333 !important;
+  background-color: #f7f7f7;
 }
 
 .bold{
@@ -36,13 +36,13 @@ body {
   background-color: gray !important;
 }
 
-input,
+/* input,
 textarea {
   border: none;
   padding: 10px;
   border-radius: 3px;
   outline: none;
-}
+} */
 
 a {
   margin-top: 5px;
