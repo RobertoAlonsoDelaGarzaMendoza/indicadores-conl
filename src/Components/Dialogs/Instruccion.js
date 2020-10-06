@@ -13,11 +13,11 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const getInstruccion = (ronda) => {
   //console.log(ronda);
   switch (ronda) {
-    case "1":
+    case 1:
       return <Ronda1 />;
-    case "2":
+    case 2:
       return <Ronda2 />;
-    case "3":
+    case 3:
       return <Ronda3 />;
     default:
       break;
@@ -27,7 +27,7 @@ const getInstruccion = (ronda) => {
 function Instruccion({ ronda, flag_open, handleClose }) {
   return (
     <Dialog
-      fullScreen
+      maxWidth="lg"
       open={flag_open}
       onClose={handleClose}
       TransitionComponent={Transition}
