@@ -13,32 +13,17 @@ import {
 import LoadingButton from "../../Panel/LoadingButton";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useHistory, useRouteMatch } from "react-router-dom";
+import { Controller, useForm } from "react-hook-form";
+
 function LoginAdmin() {
   const history = useHistory();
-  const {path} = useRouteMatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { path } = useRouteMatch();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [errors, setErrors] = useState({});
+  const { handleSubmit, control, errors } = useForm();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    validate();
-    if (email && password) {
-      //form validado
-      history.push(`${path}/usuario`);
-    }
-  };
-
-  const validate = () => {
-    let errors = {};
-    if (!email.trim()) {
-      errors.email = "Es requerido";
-    }
-    if (!password.trim()) {
-      errors.password = "Es requerido";
-    }
-    setErrors(errors);
+  const onSubmit = (data) => {
+    history.push(`${path}/usuario`);
   };
 
   return (
@@ -49,51 +34,67 @@ function LoginAdmin() {
         del Plan Estratégico de Nuevo León
       </h1>
       <h2>Administración</h2>
-      <form className="form_login_admin" noValidate handleSubmit={handleSubmit}>
-        <TextField
-          id="email"
+      <form
+        className="form_login_admin"
+        noValidate
+        onSubmit={handleSubmit(onSubmit)}
+      >
+        <Controller
+          as={TextField}
+          name="email"
+          control={control}
+          defaultValue=""
           type="text"
           label="email"
           variant="filled"
           autoFocus
           fullWidth
           color="primary"
-          value={email}
           required
-          onChange={(e) => setEmail(e.target.value)}
-          error={errors?.hasOwnProperty("email")}
-          helperText={errors?.email}
+          error={errors?.email}
+          helperText={errors?.email?.message}
+          rules={{ required: "Email es requerido" }}
         />
         <FormControl
           variant="filled"
           fullWidth
           required
-          error={errors?.hasOwnProperty("password")}
+          name="password"
+          error={errors?.password}
         >
           <InputLabel htmlFor="password">contraseña</InputLabel>
-          <FilledInput
-            id="password"
-            type={showPassword ? "text" : "password"}
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="Mostrar contraseña"
-                  onClick={() =>
-                    setShowPassword((prev) => {
-                      return !prev;
-                    })
-                  }
-                  edge="end"
-                >
-                  {showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: "Contraseña es requerido" }}
+            defaultValue=""
+            render={({ onBlur, onChange, value, name }) => (
+              <FilledInput
+                id="password"
+                name={name}
+                type={showPassword ? "text" : "password"}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                endAdornment={
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="Mostrar contraseña"
+                      onClick={() =>
+                        setShowPassword((prev) => {
+                          return !prev;
+                        })
+                      }
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            )}
           />
           <FormHelperText id="helper-text-password">
-            {errors?.password}
+            {errors?.password?.message}
           </FormHelperText>
         </FormControl>
         <LoadingButton
