@@ -1,11 +1,12 @@
 import React from "react";
 import "./Fila.css";
 import { Link } from "react-router-dom";
+import { Typography } from "@material-ui/core";
 
 function Fila({ nombre, estatus, link, subfila = false }) {
   return (
     <div className={`Indicador ${subfila && "subfila"}`}>
-      <div className="nombre">{nombre}</div>
+      <Typography component="div" variant="subtitle2" className="nombre">{nombre}</Typography>
 
       <div className="estatus">
         {link ? (
