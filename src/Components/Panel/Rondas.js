@@ -1,7 +1,8 @@
 import { Button, Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
+  checkDialogIntroduccion,
   deleteRonda,
   deleteRondas,
   deleteToken,
@@ -17,8 +18,10 @@ import Introduccion from "../Dialogs/Introduccion";
 import Documentacion from "../Dialogs/Documentacion";
 
 function Rondas() {
-  const [rondas, setFilaRondas] = useState([]);
   const dispatch = useDispatch();
+  const { dialog_introduccion } = useSelector((state) => state.checkDialogs);
+
+  const [rondas, setFilaRondas] = useState([]);
   const [loading, setLoading] = useState(false);
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
@@ -112,8 +115,10 @@ function Rondas() {
       />
       {/* Dialogs */}
       <Introduccion
-        flag_open={showDialog}
-        handleClose={() => setShowDialog(false)}
+        flag_open={dialog_introduccion}
+        handleClose={() => {
+          if (dialog_introduccion) dispatch(checkDialogIntroduccion());
+        }}
       />
       <Documentacion
         flag_open={showDocumentacion}

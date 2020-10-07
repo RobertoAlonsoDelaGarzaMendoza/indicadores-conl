@@ -2,7 +2,7 @@ import { Button, Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
-import { setRonda } from "../../Redux/Actions";
+import { checkDialogInstruccion, setRonda } from "../../Redux/Actions";
 import Api from "../../Restful/Api";
 import Lista from "./Lista";
 import Panel from "./Panel";
@@ -13,6 +13,8 @@ import Documentacion from "../Dialogs/Documentacion";
 function Ronda() {
   const ronda = useSelector((state) => state.ronda);
   const rondas = useSelector((state) => state.rondas);
+  const {dialog_instruccion} = useSelector(state => state.checkDialogs)
+
   const dispatch = useDispatch();
   let { id } = useParams();
   const [aspiraciones, setAspiraciones] = useState([]);
@@ -180,8 +182,8 @@ function Ronda() {
       {/* Dialogs */}
       <Instruccion
         ronda={ronda.no}
-        flag_open={showDialog}
-        handleClose={() => setShowDialog(false)}
+        flag_open={dialog_instruccion}
+        handleClose={() => {if(dialog_instruccion)dispatch(checkDialogInstruccion())}}
       />
       <Documentacion
         flag_open={showDocumentacion}

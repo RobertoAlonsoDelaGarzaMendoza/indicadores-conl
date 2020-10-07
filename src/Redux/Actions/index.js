@@ -68,3 +68,22 @@ export const isAdmin = (bool) => {
   }
 }
 
+export const checkDialogs = (dialgos_check)=>{
+  return{
+    type:"DIALOGS",
+    payload:dialgos_check,
+  }
+}
+
+export const checkDialogIntroduccion = ()=>{
+  return{
+    type:"CHECK_INTRODUCCION",
+  }
+}
+
+export const checkDialogInstruccion = ()=>{
+  return{
+    type:"CHECK_INSTRUCCION",
+  }
+}
+
