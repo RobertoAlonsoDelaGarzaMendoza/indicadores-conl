@@ -7,7 +7,8 @@ import {
   DialogTitle,
   TextField,
 } from "@material-ui/core";
-import React, { useState } from "react";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
 
 import "./PropuestaForm.css";
 
@@ -19,7 +20,15 @@ function PropuestaForm({
   propuestas,
   setPropuestas,
 }) {
-  const [nombre, setNombre] = useState("");
+  const defaultValues = {
+    nombre: "",
+    justificacion: "",
+    fuente: "",
+    url: "",
+  };
+  const { handleSubmit, control, reset, errors } = useForm();
+
+  /*   const [nombre, setNombre] = useState("");
   const [justificacion, setJustificacion] = useState("");
   const [fuente, setFuente] = useState("");
   const [url, setUrl] = useState("");
@@ -29,28 +38,22 @@ function PropuestaForm({
     setJustificacion("");
     setFuente("");
     setUrl("");
-  };
+  }; */
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (nombre && justificacion) {
-      // console.log("tipo >>>", tipo);
-      setPropuestas([
-        ...propuestas,
-        {
-          id: null,
-          nombre,
-          justificacion,
-          fuente,
-          url,
-          aspiracionId: tipo === "aspiracion" ? idIndicador : null,
-          objectivoId: tipo === "objetivo" ? idIndicador : null,
-          lineaEstrategicaId: tipo === "linea" ? idIndicador : null,
-        },
-      ]);
-      clearForm();
-      handleClose();
-    }
+  const onSubmit = (data) => {
+    // console.log("tipo >>>", tipo);
+    setPropuestas([
+      ...propuestas,
+      {
+        ...data,
+        id: null,
+        aspiracionId: tipo === "aspiracion" ? idIndicador : null,
+        objectivoId: tipo === "objetivo" ? idIndicador : null,
+        lineaEstrategicaId: tipo === "linea" ? idIndicador : null,
+      },
+    ]);
+    reset(defaultValues);
+    handleClose();
   };
 
   return (
@@ -66,48 +69,60 @@ function PropuestaForm({
         <DialogContentText>
           ¿Qué otro indicador considera que debe incluirse?
         </DialogContentText>
-        <form className="propuesta_dialog_form" onSubmit={handleSubmit}>
-          <TextField
+        <form
+          className="propuesta_dialog_form"
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
+        >
+          <Controller
+            as={TextField}
+            control={control}
             variant="filled"
             fullWidth
             id="nombre"
             name="nombre"
-            value={nombre}
+            defaultValue=""
             required
             label="Nombre del indicador"
-            onChange={(e) => setNombre(e.target.value)}
+            error={errors?.nombre}
+            helperText={errors?.nombre?.message}
+            rules={{ required: "Campo requerido" }}
           />
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="filled"
             fullWidth
             multiline
-            id="razon"
-            nombre="razon"
+            id="justificacion"
+            name="justificacion"
+            defaultValue=""
             rows={4}
-            value={justificacion}
             required
             label="¿Por qué incluir este nuevo indicador?"
-            onChange={(e) => setJustificacion(e.target.value)}
-          ></TextField>
-          <TextField
+            error={errors?.justificacion}
+            helperText={errors?.justificacion?.message}
+            rules={{ required: "Campo requerido" }}
+          />
+          <Controller
+            as={TextField}
+            control={control}
             variant="filled"
             fullWidth
             id="fuente"
             name="fuente"
-            value={fuente}
-            required={false}
+            defaultValue=""
             label="Fuente del indicador"
-            onChange={(e) => setFuente(e.target.value)}
           />
-          <TextField
+          <Controller
+            as={TextField}
+            control={control}
             variant="filled"
+            defaultValue=""
             fullWidth
-            id="direccion"
-            name="direccion"
-            value={url}
-            required={false}
-            label="Url o dirección donde podriamos encontrar informacion"
-            onChange={(e) => setUrl(e.target.value)}
+            id="url"
+            name="url"
+            label="Url o dirección donde podríamos encontrar información"
           />
         </form>
       </DialogContent>
@@ -115,7 +130,7 @@ function PropuestaForm({
         <Button onClick={handleClose} variant="contained" color="primary">
           Cancelar
         </Button>
-        <Button onClick={handleSubmit} variant="contained" color="secondary">
+        <Button type="submit" onClick={handleSubmit(onSubmit)} variant="contained" color="secondary">
           Guardar
         </Button>
       </DialogActions>

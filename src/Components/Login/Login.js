@@ -8,14 +8,13 @@ import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { loginIn, setToken, setUser } from "../../Redux/Actions";
 import LoadingButton from "../Panel/LoadingButton";
+import { Controller, useForm } from "react-hook-form";
 
 function Login() {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState("");
+  const { handleSubmit, control, errors } = useForm();
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
-
-  //const {handleSubmit,control,errors} = useForm();
 
   const dispatch = useDispatch();
 
@@ -26,12 +25,9 @@ function Login() {
     setMessageSnackbar(true);
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
     setLoading(true);
-    Api.post("/login", {
-      email: email,
-    })
+    Api.post("/login", data)
       .then((response) => {
         setLoading(false);
         //console.log("correct >>>", response);
@@ -73,24 +69,35 @@ function Login() {
           Plataforma participativa para la identificación de indicadores y metas
           del Plan Estratégico de Nuevo León
         </Typography>
-        <Typography variant="h4">Ingrese a la plataforma con su correo electrónico registrado</Typography>
+        <Typography variant="h4">
+          Ingrese a la plataforma con su correo electrónico registrado
+        </Typography>
         <form
           className={loading ? "Login_form" : "Login_form"}
-          onSubmit={handleSubmit}
+          noValidate
+          onSubmit={handleSubmit(onSubmit)}
         >
-          <TextField
+          <Controller
+            as={TextField}
             name="email"
+            control={control}
+            defaultValue=""
+            type="text"
             label="Email"
             variant="filled"
+            color="primary"
             required
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            error={errors?.email}
+            helperText={errors?.email?.message}
+            rules={{ required: "Email es requerido" }}
+            autoFocus
           />
           <LoadingButton
             className="Login_button"
             loading={loading}
             text="Ingresar"
             loading_text="Cargando"
+            type="submit"
             onClick={handleSubmit}
             color="primary"
             variant="contained"

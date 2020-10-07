@@ -98,14 +98,13 @@ function LoginAdmin() {
           </FormHelperText>
         </FormControl>
         <LoadingButton
-          className="Button"
           loading={false}
           text="Ingresar"
           loading_text="Cargando"
           variant="contained"
           color="primary"
-          type="submmit"
-          onClick={handleSubmit}
+          type="submit"
+          fullWidth
         />
       </form>
     </div>
