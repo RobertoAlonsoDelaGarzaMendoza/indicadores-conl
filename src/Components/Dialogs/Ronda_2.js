@@ -1,29 +1,32 @@
+import { Typography } from "@material-ui/core";
 import React from "react";
 import "./Dialog.css";
 
 function Ronda_2() {
   return (
     <div className="informacion_dialogo">
-      <h3>Bienvenido</h3>
-      <p>
+      <Typography variant="h6">Bienvenido</Typography>
+      <Typography variant="body1" paragraph>
         A continuación se presentará una lista de indicadores cuyo propósito es
         medir el avance en el logro de las aspiraciones, los objetivos y las
         líneas estratégicas en temas específicos del Plan Estratégico de Nuevo
         León.
-      </p>
-      <p>Con base en su conocimiento y experiencia le pedimos que:</p>
+      </Typography>
+      <Typography variant="body1" paragraph>
+        Con base en su conocimiento y experiencia le pedimos que:
+        <ol>
+          <li>
+            Señale si considera <strong>-o no*-</strong> que el indicador
+            propuesto reflejaría el avance en el logro de cada aspiración,
+            objetivo o línea estratégica según corresponda.
+          </li>
+        </ol>
+      </Typography>
 
-      <ol>
-        <li>
-          Señale si considera <strong>-o no*-</strong> que el indicador
-          propuesto reflejaría el avance en el logro de cada aspiración,
-          objetivo o línea estratégica según corresponda.
-        </li>
-      </ol>
-      <p>
+      <Typography variant="body1" paragraph>
         <strong>*Nota importante</strong> en dichos casos recuerde escribir los
         argumentos o razones de su elección.​
-      </p>
+      </Typography>
     </div>
   );
 }

@@ -1,7 +1,15 @@
 import React from "react";
 import logo from "../../Assets/nuevo_leon_logo.svg";
 
-import { Dialog, DialogTitle, DialogContent, Slide } from "@material-ui/core";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Slide,
+  DialogActions,
+  Button,
+  Typography,
+} from "@material-ui/core";
 import Ronda1 from "./Ronda_1";
 import Ronda2 from "./Ronda_2";
 import Ronda3 from "./Ronda_3";
@@ -27,26 +35,31 @@ const getInstruccion = (ronda) => {
 function Instruccion({ ronda, flag_open, handleClose }) {
   return (
     <Dialog
-      maxWidth="lg"
+      fullWidth
+      maxWidth="md"
       open={flag_open}
       onClose={handleClose}
       TransitionComponent={Transition}
     >
-      <DialogTitle className="informacion">
-        <h2 className="font-morado">Ronda {ronda}</h2>
-        <h2 className="font-morado">Instrucciones</h2>
+      <DialogTitle>
+        <Typography variant="h4" color="primary" align="center">
+          Ronda {ronda}
+        </Typography>
+        <Typography variant="h4" color="primary" align="center">
+          Instrucciones
+        </Typography>
       </DialogTitle>
       <DialogContent className="informacion">
         {getInstruccion(ronda)}
-        <div className="bottom_button">
-          <button className="Button" onClick={handleClose}>
-            entendido
-          </button>
-        </div>
         <div className="Login_logo_section">
           <img alt="logo_nuevo_leon" className="Login_logo" src={logo} />
         </div>
       </DialogContent>
+      <DialogActions>
+        <Button variant="text" color="primary" onClick={handleClose}>
+          ¡Empecemos!
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 }

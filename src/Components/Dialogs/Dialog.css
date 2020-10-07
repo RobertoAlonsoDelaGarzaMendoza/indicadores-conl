@@ -1,7 +1,5 @@
 .informacion_dialogo{
-    margin-left: 20%;
-    margin-right: 20%;
-    margin-bottom: 5%;
+    margin: 1rem 3rem;
     text-align: justify;
 }
 
