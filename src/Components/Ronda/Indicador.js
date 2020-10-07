@@ -124,20 +124,6 @@ function Indicador({ tipo_ronda }) {
               };
           return {
             ...indicador,
-            images: [
-              {
-                id: 1,
-                descripcion: "porno 1",
-                url:
-                  "http://pornomass.com/uploads/photo/full/1966-slovenian-porn-wallpapers.jpg",
-              },
-              {
-                id: 2,
-                descripcion: "porno 2",
-                url:
-                  "http://pornomass.com/uploads/photo/full/1965-serbian-porno-wallpapers.jpg",
-              },
-            ],
             voto: {
               ...voto,
               tipo_voto: `${voto.tipo_voto}`,
