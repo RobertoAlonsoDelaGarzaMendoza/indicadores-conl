@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./Carusel.css";
-import { MobileStepper } from "@material-ui/core";
+import { Button, MobileStepper, Typography } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import SwipeableViews from "react-swipeable-views";
 import Skeleton from "../Helpers/Skeleton";
 
 function Carusel({ loading, imagenes = [] }) {
-  const [step, setStep] = useState(imagenes.length ? 0 : -1);
+  const [step, setStep] = useState(0);
   const handleNext = () => {
     setStep((prevStep) => prevStep + 1);
   };
@@ -40,8 +40,8 @@ function Carusel({ loading, imagenes = [] }) {
       >
         {imagenes.map((imagen) => (
           <div key={imagen.id}>
-            <h2>{imagen.descripcion}</h2>
-            <div>
+            <Typography variant="h6" align="center">{imagen.descripcion}</Typography>
+            <div style={{display:"flex"}}>
               <img
                 src={imagen.url}
                 className="img-responsive"
@@ -58,22 +58,24 @@ function Carusel({ loading, imagenes = [] }) {
           position="static"
           activeStep={step}
           nextButton={
-            <button
+            <Button
               onClick={handleNext}
-              className="Button"
+              variant="text"
+              color="primary"
               disabled={step === imagenes.length - 1}
             >
               <KeyboardArrowRight />
-            </button>
+            </Button>
           }
           backButton={
-            <button
+            <Button
               onClick={handleBack}
-              className="Button"
+              variant="text"
+              color="primary"
               disabled={imagenes.length ? step === 0 : true}
             >
               <KeyboardArrowLeft />
-            </button>
+            </Button>
           }
         ></MobileStepper>
       ) : null}

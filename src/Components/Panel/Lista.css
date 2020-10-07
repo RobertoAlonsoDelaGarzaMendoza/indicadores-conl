@@ -1,15 +1,16 @@
 .indicadores_tabla{
     display: flex;
     justify-content: space-around;
+    margin-top: 1.5rem;
 }
-.indicadores_tabla h3{
+.indicadores_tabla h6{
     color: #5a2149;
 }
 
-.indicadores_tabla h3:first-child{
+.indicadores_tabla h6:first-child{
     flex:80%;
 }
-.indicadores_tabla h3:last-child{
+.indicadores_tabla h6:last-child{
     flex:20%;
     text-align: center;
 }

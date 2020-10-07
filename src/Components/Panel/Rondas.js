@@ -1,4 +1,4 @@
-import { Snackbar } from "@material-ui/core";
+import { Button, Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import {
@@ -65,6 +65,7 @@ function Rondas() {
         }
       })
       .catch((error) => {
+        setLoading(false);
         if (error.response) {
           console.log(error.response.data);
           showSnackbar(error.response.data.mesage);
@@ -88,10 +89,12 @@ function Rondas() {
         filas={rondas}
       />
       <div className="bottom_button">
-        <button className="Button morado">Documentación</button>
-        <button className="Button azul" onClick={handleSalir}>
+        <Button variant="contained" color="primary">
+          Documentación
+        </Button>
+        <Button variant="contained" color="secondary" onClick={handleSalir}>
           Salir
-        </button>
+        </Button>
       </div>
       {/* Snackbar section */}
       <Snackbar

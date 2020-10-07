@@ -2,14 +2,15 @@ import React from "react";
 import "./Lista.css";
 import Fila from "./Fila";
 import Skeleton from "../Helpers/Skeleton";
+import { Typography } from "@material-ui/core";
 
 function Lista({ loading, filas, nombre, titulo, titulo_accion }) {
   return (
     <div className="RondaPanel">
-      <h2 className="usuario_informacion">{nombre}</h2>
+      <Typography variant="h5">{nombre}</Typography>
       <div className="indicadores_tabla">
-        <h3>{loading ? <Skeleton /> : titulo}</h3>
-        <h3>{loading ? <Skeleton /> : titulo_accion}</h3>
+        <Typography variant="h6">{loading ? <Skeleton /> : titulo}</Typography>
+        <Typography variant="h6">{loading ? <Skeleton /> : titulo_accion}</Typography>
       </div>
       {loading ? (
         <Skeleton />
@@ -40,7 +41,7 @@ function Lista({ loading, filas, nombre, titulo, titulo_accion }) {
           );
         })
       ) : (
-        <h4>Sin elementos</h4>
+        <Typography variant="h6">Sin elementos</Typography>
       )}
     </div>
   );

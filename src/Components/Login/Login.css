@@ -12,7 +12,12 @@
     display: flex;
 }
 
-.Login_Headlines h2{
+.Login_Headlines > *{
+    margin-top: 2rem !important;
+    margin-bottom: .5rem !important;
+}
+
+.Login_Headlines h4{
     color:gray;
 }
 
@@ -24,21 +29,16 @@
     
 }
 
-.Login_form input{
-    background-color: #5d5d5d;
-    color:white;
-    border-radius: 3px 0px 0px 3px;
-}
+.Login_form .MuiInputBase-root{
+    border-radius: 3px 0px 0px 0px;
+} 
 .Login_form button{
     border-radius: 0px 3px 3px 0px;
     transition: 200ms ease-in;
 }
-.Login_form input::placeholder{
-    color:white;
-}
 
 .Login_links{
-    margin-top: 1rem;
+    margin: 1rem;
     display: flex;
     flex-direction: column;
 }

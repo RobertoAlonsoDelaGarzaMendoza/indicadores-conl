@@ -20,12 +20,17 @@ import {
   Grid,
   Snackbar,
   Tooltip,
+  Button,
+  Typography,
+  TextField,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from "@material-ui/core";
 import KeyboardArrowLeft from "@material-ui/icons/KeyboardArrowLeft";
 import KeyboardArrowRight from "@material-ui/icons/KeyboardArrowRight";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import Instruccion from "../Dialogs/Instruccion";
 import Carusel from "./Carusel";
 import { useHistory, useParams } from "react-router-dom";
 
@@ -39,18 +44,21 @@ import Skeleton from "../Helpers/Skeleton";
 function Indicador({ tipo_ronda }) {
   let { tipo, idIndicador } = useParams();
   let history = useHistory();
+
   const ronda = useSelector((state) => state.ronda);
+
   const [indicador, setIndicador] = useState("");
   const [mostrar_cuadro_razon, setMostraRazon] = useState(false);
   const [step, setStep] = useState(0);
-  const [dialog_open, setDialogOpen] = useState(false);
   const [finalizar, setFinalizar] = useState(false);
   const [estado_panel_finalizar, setEstadoPanelFinalizar] = useState(false);
   const [indicadores, setIndicadores] = useState([]);
   const [propuestas, setPropuestas] = useState([]);
   const [dialog_propuesta, setDialogPropuesta] = useState(false);
+
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
 
@@ -197,19 +205,6 @@ function Indicador({ tipo_ronda }) {
     setStep((prevStep) => prevStep - 1);
   };
 
-  const handleClose = () => {
-    setDialogOpen(false);
-  };
-
-  const handleSlide = (event, newValue) => {
-    handleInput({
-      target: {
-        type: "slider",
-        value: newValue,
-      },
-    });
-  };
-
   const handleInput = (e) => {
     let indicador = indicadores[step];
     switch (e.target.type) {
@@ -337,47 +332,50 @@ function Indicador({ tipo_ronda }) {
       <div className="Login_logo_section">
         <img alt="logo_nuevo_leon" className="Login_logo" src={logo} />
       </div>
-      <Paper variant="elevation" elevation={4} className="panel_card">
+      <Paper variant="elevation" elevation={2} className="panel_card">
         <div
-          className={`indicador informacion y-scroll ${
+          className={`indicador y-scroll ${
             !estado_panel_finalizar ? "active" : ""
           }`}
         >
           <LoadingButton
-            className="Button azul"
             loading={sending}
             text="Salir"
             loading_text="Enviando"
             onClick={handleSalir}
+            variant="contained"
+            color="primary"
           />
           {/*  <button className="Button" onClick={handleSalir}>
             <ArrowBackIcon />
             salir
           </button> */}
-          <h2>{loading ? <Skeleton /> : indicador}</h2>
-          <h3 className="font-morado">
-            {loading ? <Skeleton /> : indicadores[step]?.nombre}
-          </h3>
-          <Grid container alignItems="center">
+          <Typography variant="h5" align="center">
+            {loading ? <Skeleton height="5rem" /> : indicador}
+          </Typography>
+          <Typography variant="h6" align="center" color="primary">
+            {loading ? <Skeleton height="2rem" /> : indicadores[step]?.nombre}
+          </Typography>
+          <Grid container alignItems="center" justify="center">
             <Grid item sm={12} md={indicadores[step]?.images ? 6 : "auto"}>
               <Carusel loading={loading} imagenes={indicadores[step]?.images} />
             </Grid>
-            <Grid item sm={12} md={6}>
-              <div className="informacion">
-                <div className="informacion_dialogo">
-                  {loading ? (
-                    <>
-                      <Skeleton marginTop="1rem" />
-                      <Skeleton marginTop="1rem" />
-                    </>
-                  ) : (
-                    <>
-                      <p className="bold">{indicadores[step]?.definicion}</p>
-                      <p>Fuente: {indicadores[step]?.fuente}</p>
-                    </>
-                  )}
-                </div>
-              </div>
+            <Grid className="definicion_fuente" item sm={12} md={6}>
+              {loading ? (
+                <>
+                  <Skeleton marginTop="1rem" />
+                  <Skeleton marginTop="1rem" />
+                </>
+              ) : (
+                <>
+                  <Typography variant="body1" className="bold" paragraph>
+                    {indicadores[step]?.definicion}
+                  </Typography>
+                  <Typography variant="body1">
+                    Fuente: {indicadores[step]?.fuente}
+                  </Typography>
+                </>
+              )}
             </Grid>
           </Grid>
           <div className="form">
@@ -386,15 +384,17 @@ function Indicador({ tipo_ronda }) {
                 {loading ? (
                   <Skeleton marginTop="1rem" />
                 ) : (
-                  <p>¿Qué tan probable es alcanzar la meta planteada?​</p>
+                  <Typography variant="body1">
+                    ¿Qué tan probable es alcanzar la meta planteada?​
+                  </Typography>
                 )}
                 {loading ? (
                   <Skeleton />
                 ) : (
-                  <input
+                  <TextField
                     value={indicadores[step]?.voto.valor_meta}
                     onChange={handleInput}
-                    placeholder={indicadores[step]?.unidad_medida}
+                    label={indicadores[step]?.unidad_medida}
                   />
                 )}
               </div>
@@ -403,46 +403,54 @@ function Indicador({ tipo_ronda }) {
               {loading ? (
                 <Skeleton marginTop="1rem" />
               ) : tipo_ronda === "meta" ? (
-                <p>¿Qué tan probable es alcanzar la meta planteada?​</p>
+                <Typography variant="body1">
+                  ¿Qué tan probable es alcanzar la meta planteada?​
+                </Typography>
               ) : (
-                <p>
+                <Typography variant="body1">
                   {`¿Considera usted que este indicador contribuye a monitorear
                     el avance ${tipo !== "objetivo" ? "de la" : "del"} ${
                     tipo == "linea" ? "línea estrategica" : tipo
                   }?`}
-                </p>
+                </Typography>
               )}
               {loading ? (
                 <Skeleton marginTop="1rem" />
               ) : (
-                <RadioGroup
-                  className="opciones_ronda"
-                  aria-label="gender"
-                  name="inclusion"
-                  value={indicadores[step]?.voto.tipo_voto}
-                  onChange={handleInput}
-                >
-                  {opciones.map((opcion, index) => (
-                    <FormControlLabel
-                      key={index}
-                      value={opcion.value}
-                      control={<Radio />}
-                      label={opcion.label}
-                    />
-                  ))}
-                </RadioGroup>
-              )}
-              {tipo_ronda === "indicador" && (
-                <textarea
-                  autoFocus={mostrar_cuadro_razon}
-                  type="textarea"
-                  value={indicadores[step]?.voto.razon_no}
-                  onChange={handleInput}
-                  className={
-                    mostrar_cuadro_razon ? "panel_razon" : "panel_razon oculto"
-                  }
-                  placeholder="Escriba las razones por las cuales no debería incluirse este indicador: ​"
-                ></textarea>
+                <Accordion square expanded={mostrar_cuadro_razon}>
+                  <AccordionSummary>
+                    <RadioGroup
+                      className="opciones_ronda"
+                      aria-label="gender"
+                      name="inclusion"
+                      value={indicadores[step]?.voto.tipo_voto}
+                      onChange={handleInput}
+                    >
+                      {opciones.map((opcion, index) => (
+                        <FormControlLabel
+                          key={index}
+                          value={opcion.value}
+                          control={<Radio />}
+                          label={opcion.label}
+                        />
+                      ))}
+                    </RadioGroup>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    {tipo_ronda === "indicador" && (
+                      <TextField
+                        fullWidth
+                        multiline
+                        type="textarea"
+                        variant="filled"
+                        rows={15}
+                        label="Escriba las razones por las cuales no debería incluirse este indicador: ​"
+                        value={indicadores[step]?.voto.razon_no}
+                        onChange={handleInput}
+                      />
+                    )}
+                  </AccordionDetails>
+                </Accordion>
               )}
             </div>
           </div>
@@ -456,9 +464,11 @@ function Indicador({ tipo_ronda }) {
                 position="static"
                 activeStep={step}
                 nextButton={
-                  <button
+                  <Button
+                    variant="text"
+                    color="secondary"
                     onClick={handleNext}
-                    className="Button azul button-stepper"
+                    className="button-stepper"
                     disabled={
                       (indicadores[step]?.voto.tipo_voto == "1" &&
                         indicadores[step]?.voto.razon_no === "") ||
@@ -467,17 +477,19 @@ function Indicador({ tipo_ronda }) {
                   >
                     siguiente
                     <KeyboardArrowRight />
-                  </button>
+                  </Button>
                 }
                 backButton={
-                  <button
+                  <Button
+                    variant="text"
+                    color="secondary"
                     onClick={handleBack}
-                    className="Button azul button-stepper"
+                    className="button-stepper"
                     disabled={step === 0}
                   >
                     <KeyboardArrowLeft />
                     anterior
-                  </button>
+                  </Button>
                 }
               ></MobileStepper>
             )}
@@ -515,17 +527,20 @@ function Indicador({ tipo_ronda }) {
                     let voto = indicador.voto.tipo_voto;
                     //console.log("valor voto>>>", voto);
                     let opcion =
-                      voto === null
+                      voto === "99"
                         ? { label: "Sin seleccionar" }
                         : opciones.find((opcion) => opcion.value == voto);
                     //console.log("valor opcion>>>", opcion);
                     return (
-                      <ListItem key={indicador.id}>
-                        <ListItemText
-                          primary={indicador.nombre}
-                          secondary={opcion?.label}
-                        />
-                      </ListItem>
+                      <>
+                        <ListItem key={indicador.id}>
+                          <ListItemText
+                            primary={indicador.nombre}
+                            secondary={opcion?.label}
+                          />
+                        </ListItem>
+                        <Divider />
+                      </>
                     );
                   })}
                   {propuestas.length ? (
@@ -536,23 +551,26 @@ function Indicador({ tipo_ronda }) {
                   ) : null}
 
                   {propuestas.map((propuesta, index) => (
-                    <ListItem key={index}>
-                      <ListItemText
-                        primary={propuesta.nombre}
-                        secondary={propuesta.razon_no}
-                      />
-                      <ListItemSecondaryAction>
-                        <IconButton
-                          edge="end"
-                          aria-label="eliminar"
-                          onClick={() => {
-                            handleDeletePropuesta(index);
-                          }}
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </ListItemSecondaryAction>
-                    </ListItem>
+                    <>
+                      <ListItem key={index}>
+                        <ListItemText
+                          primary={propuesta.nombre}
+                          secondary={propuesta.razon_no}
+                        />
+                        <ListItemSecondaryAction>
+                          <IconButton
+                            edge="end"
+                            aria-label="eliminar"
+                            onClick={() => {
+                              handleDeletePropuesta(index);
+                            }}
+                          >
+                            <DeleteIcon />
+                          </IconButton>
+                        </ListItemSecondaryAction>
+                      </ListItem>
+                      <Divider />
+                    </>
                   ))}
                 </List>
               )}
@@ -563,17 +581,19 @@ function Indicador({ tipo_ronda }) {
               >
                 {tipo_ronda === "indicador" ? (
                   <Tooltip arrow placement="bottom" title={tooltip_propuesta}>
-                    <button
-                      disabled={propuestas.length == 2}
-                      className="Button"
+                    <Button
+                      disabled={propuestas.length == 20}
+                      variant="contained"
+                      color="primary"
                       onClick={() => setDialogPropuesta(true)}
                     >
                       Proponer
-                    </button>
+                    </Button>
                   </Tooltip>
                 ) : null}
                 <LoadingButton
-                  className="Button azul"
+                  variant="contained"
+                  color="secondary"
                   loading={sending}
                   text="Finalizar"
                   loading_text="Enviando"
@@ -584,13 +604,6 @@ function Indicador({ tipo_ronda }) {
           </div>
         </Hidden>
       </Paper>
-      {
-        <Instruccion
-          ronda={ronda.id}
-          flag_open={dialog_open}
-          handleClose={handleClose}
-        />
-      }
       {/* Propuesta Dialog */}
       <PropuestaForm
         idIndicador={idIndicador}
