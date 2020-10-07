@@ -13,6 +13,7 @@ import Api from "../../Restful/Api";
 import Lista from "./Lista";
 import Panel from "./Panel";
 import UserHeader from "./UserHeader";
+import Introduccion from '../Dialogs/Introduccion'
 
 function Rondas() {
   const [rondas, setFilaRondas] = useState([]);
@@ -20,6 +21,8 @@ function Rondas() {
   const [loading, setLoading] = useState(false);
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
+  const [showDialog, setShowDialog] = useState(true);
+
 
   const showSnackbar = (message) => {
     setMessage(message);
@@ -98,6 +101,11 @@ function Rondas() {
         onClose={() => {
           setMessageSnackbar(false);
         }}
+      />
+      <Introduccion
+        flag_open={showDialog}
+        handleClickOpen={()=>setShowDialog(true)}
+        handleClose={()=>setShowDialog(false)}
       />
     </Panel>
   );

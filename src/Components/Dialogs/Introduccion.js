@@ -11,7 +11,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 function Introduccion({ flag_open, handleClose }) {
   return (
     <Dialog
-      fullScreen
+    maxWidth="lg"
       open={flag_open}
       onClose={handleClose}
       TransitionComponent={Transition}
