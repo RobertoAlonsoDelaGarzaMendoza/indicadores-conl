@@ -13,7 +13,8 @@ import Api from "../../Restful/Api";
 import Lista from "./Lista";
 import Panel from "./Panel";
 import UserHeader from "./UserHeader";
-import Introduccion from '../Dialogs/Introduccion'
+import Introduccion from "../Dialogs/Introduccion";
+import Documentacion from "../Dialogs/Documentacion";
 
 function Rondas() {
   const [rondas, setFilaRondas] = useState([]);
@@ -22,7 +23,7 @@ function Rondas() {
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
   const [showDialog, setShowDialog] = useState(true);
-
+  const [showDocumentacion, setShowDocumentacion] = useState(false);
 
   const showSnackbar = (message) => {
     setMessage(message);
@@ -89,7 +90,11 @@ function Rondas() {
         filas={rondas}
       />
       <div className="bottom_button">
-        <Button variant="contained" color="primary">
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setShowDocumentacion(true)}
+        >
           Documentación
         </Button>
         <Button variant="contained" color="secondary" onClick={handleSalir}>
@@ -105,10 +110,14 @@ function Rondas() {
           setMessageSnackbar(false);
         }}
       />
+      {/* Dialogs */}
       <Introduccion
         flag_open={showDialog}
-        handleClickOpen={()=>setShowDialog(true)}
-        handleClose={()=>setShowDialog(false)}
+        handleClose={() => setShowDialog(false)}
+      />
+      <Documentacion
+        flag_open={showDocumentacion}
+        handleClose={() => setShowDocumentacion(false)}
       />
     </Panel>
   );

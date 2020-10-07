@@ -1,4 +1,4 @@
-import { Snackbar } from "@material-ui/core";
+import { Button, Snackbar } from "@material-ui/core";
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
@@ -7,7 +7,8 @@ import Api from "../../Restful/Api";
 import Lista from "./Lista";
 import Panel from "./Panel";
 import UserHeader from "./UserHeader";
-import Instruccion from '../Dialogs/Instruccion'
+import Instruccion from "../Dialogs/Instruccion";
+import Documentacion from "../Dialogs/Documentacion";
 
 function Ronda() {
   const ronda = useSelector((state) => state.ronda);
@@ -20,7 +21,8 @@ function Ronda() {
   const [loading, setLoading] = useState(false);
   const [message_snackbar, setMessageSnackbar] = useState(false);
   const [message, setMessage] = useState("");
-  const [showDialog, setShowDialog] = useState(true)
+  const [showDialog, setShowDialog] = useState(true);
+  const [showDocumentacion, setShowDocumentacion] = useState(false);
 
   const showSnackbar = (message) => {
     setMessage(message);
@@ -153,9 +155,17 @@ function Ronda() {
         filas={lineas}
       /> */}
       <div className="bottom_button">
-        <button className="Button morado">Documentación</button>
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={() => setShowDocumentacion(true)}
+        >
+          Documentación
+        </Button>
         <Link className="link_router" to="/rondas">
-          <button className="Button azul">Salir</button>
+          <Button variant="contained" color="secondary">
+            Salir
+          </Button>
         </Link>
       </div>
       {/* Snackbar section */}
@@ -167,11 +177,16 @@ function Ronda() {
           setMessageSnackbar(false);
         }}
       />
-       <Instruccion
-        ronda = {ronda.no}
+      {/* Dialogs */}
+      <Instruccion
+        ronda={ronda.no}
         flag_open={showDialog}
-        handleClose={()=>setShowDialog(false)}
-      /> 
+        handleClose={() => setShowDialog(false)}
+      />
+      <Documentacion
+        flag_open={showDocumentacion}
+        handleClose={() => setShowDocumentacion(false)}
+      />
     </Panel>
   );
 }
